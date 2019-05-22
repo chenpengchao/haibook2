@@ -147,7 +147,7 @@ public class StringUtils {
         ConversionType currentConversionType = ConversionType.S2TWP;
         int convertType = SharedPreUtils.getInstance().getInt(SHARED_READ_CONVERT_TYPE, 0);
 
-        if (input.length() == 0)
+        if (input==null||input.length() == 0)
             return "";
 
         switch (convertType) {

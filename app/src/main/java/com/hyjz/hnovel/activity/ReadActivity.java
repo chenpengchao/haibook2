@@ -799,10 +799,10 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
 
     // 退出
     private void exit() {
-        // 返回给BookDetail。
-        Intent intent = new Intent(mContext, BookDetailAc.class);
-        //intent.putExtra("bookId", mAdapter.getData().get(position).getBookId());
-        startActivity(intent);
+//        // 返回给BookDetail。
+//        Intent intent = new Intent(mContext, BookDetailAc.class);
+//        //intent.putExtra("bookId", mAdapter.getData().get(position).getBookId());
+//        startActivity(intent);
         // 退出
         super.onBackPressed();
     }

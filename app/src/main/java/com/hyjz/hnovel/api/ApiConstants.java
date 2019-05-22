@@ -18,8 +18,8 @@ package com.hyjz.hnovel.api;
 
 public class ApiConstants {
 
-//    public static final String BASE_URL = "http://www.kway.cc";
-    public static final String BASE_URL = "http://hyjz.tpddns.cn:8089";
+    public static final String BASE_URL = "http://www.haishuwu.com";
+//    public static final String BASE_URL = "http://hyjz.tpddns.cn:8089";
 
     public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
     public static final String END_URL = "-20.html";
