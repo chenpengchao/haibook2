@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <!--白天主题-->
+    <color name="day_backgroup_color">#FFFFFFFF</color>
+    <color name="day_one_text_color">#FF000000</color>
+    <color name="day_two_text_color">#c9000000</color>
+    <color name="day_three_text_color">#8A9599</color>
+    <!--夜间主题-->
+    <color name="night_backgroup_color">#3F3F3F</color>
+    <color name="night_one_text_color">#FFbbbbbb</color>
+    <color name="night_two_text_color">#8A9599</color>
+    <color name="night_there_text_color">#8A9599</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="toast_white">#ffffff</color>
+    <color name="main_color">#FF0000</color>
+    <color name="transparent">#00000000</color>
+    <color name="toast_stroke_gray">#99d4d4d4</color>
+    <color name="black">#FF000000</color>
+    <color name="gray">#FFF0F0F0</color>
+    <color name="gray_deep">#c9000000</color>
+    <color name="light_gray">#808080</color>
+    <color name="text_grey">#AEAEAE</color>
+    <color name="color_d8d8d8">#d8d8d8</color>
+    <!--通用背景色-->
+    <color name="common_bg">@color/white</color>
+    <!--通用触摸背景色-->
+    <color name="common_touch_bg">#E3E3E3</color>
+    <!--通用背景色-->
+    <color name="common_gray_bg">#EEEEEE</color>
+    <!--通用一级标题的颜色-->
+    <color name="common_h1">#212121</color>
+    <!--通用二级标题的颜色-->
+    <color name="common_h2">#FF8F8F8F</color>
+    <!--通用三级标题的颜色-->
+    <color name="common_h3">#B2B2B2</color>
+    <!--连载中的颜色-->
+    <color name="corlor_lianzai">#FF49BFA5</color>
+    <color name="color_F3F5F4">#F3F5F4</color>
+    <color name="red">#E25949</color>
+    <color name="reader_menu_bg_color">#191919</color>
+
+    <!--章节标题夜间颜色-->
+    <color name="chapter_title_night">#292929</color>
+    <!--章节内容夜间颜色-->
+    <color name="chapter_content_night">#444444</color>
+    <!--章节标题日间颜色-->
+    <color name="chapter_title_day">#837B63</color>
+    <!--章节内容夜间颜色-->
+    <color name="chapter_content_day">#3B3220</color>
+    <!--阅读页顶部字体颜色-->
+    <color name="book_read_top_text">#D1D1D1</color>
+    <!--阅读页底部字体颜色-->
+    <color name="book_read_bottom_text">#e6e6e6</color>
+
+    <!--性别选择颜色值-->
+    <color name="gender_select_male_normal">#B0E2FF</color>
+    <color name="gender_select_male_pressed">#B2DFEE</color>
+    <color name="gender_select_female_normal">#EEA9B8</color>
+    <color name="gender_select_female_pressed">#EEA2AD</color>
+    <color name="read_theme_white">#ffffff</color>
+    <color name="read_theme_green">#bed0cf</color>
+    <color name="read_theme_yellow">#e6dbbf</color>
+    <color name="read_theme_gray">#AAAAAA</color>
+    <color name="read_theme_night">#000000</color>
+
+
+    <!--list-->
+    <color name="nb.divider.common">#727272</color>
+    <color name="nb.divider.dash">@color/light_white</color>
+    <!--通用分割线细-->
+    <color name="nb.divider.narrow">#E3E3E3</color>
+    <!--通用分割线粗-->
+    <color name="nb.divider.wide">@color/light_white</color>
+
+
+    <!--text-->
+
+    <color name="nb.text.default">@color/black</color>
+    <!--通用一级标题的颜色-->
+    <color name="nb.text.common_h1">#212121</color>
+    <!--通用二级标题的颜色-->
+    <color name="nb.text.common_h2">#727272</color>
+    <!--通用三级标题的颜色-->
+    <color name="nb.text.common_h3">#B2B2B2</color>
+
+    <color name="nb.text.user_name">@color/light_coffee</color>
+    <color name="translucent_text">#96ffffff</color>
+
+    <!--button-->
+    <color name="nb.widget.button.normal">@color/white</color>
+    <color name="nb.widget.button.selected">#E3E3E3</color>
+
+    <!--性别选择颜色值-->
+    <color name="gender_select_boy_normal">#B0E2FF</color>
+    <color name="gender_select_boy_pressed">#B2DFEE</color>
+    <color name="gender_select_girl_normal">#EEA9B8</color>
+    <color name="gender_select_girl_pressed">#EEA2AD</color>
+
+    <!---->
+    <color name="nb.popup.text.selected">@color/light_pink</color>
+    <!---->
+    <color name="nb.scroll_refresh.tip">#88303F9F</color>
+    <!--downlaod-->
+    <color name="nb.download.loading">#8bd715</color>
+    <color name="nb.download.pause">#f3aa41</color>
+    <color name="nb.download.wait">#afafad</color>
+    <color name="nb.download.error">#e33a35</color>
+    <color name="nb.download.finish">#8bd715</color>
+
+    <!--read-->
+    <color name="nb.read.bg_1">#CEC29C</color>
+    <color name="nb.read.bg_2">#CCEBCC</color>
+    <color name="nb.read.bg_3">#AAAAAA</color>
+    <color name="nb.read.bg_4">#D1CEC5</color>
+    <color name="nb.read.bg_5">#001C27</color>
+    <color name="nb.read.bg_6">#DDCEC29C</color>
+
+
+    <color name="nb.read.font_1">#2C2C2C</color>
+    <color name="nb.read.font_2">#2F332D</color>
+    <color name="nb.read.font_3">#92918C</color>
+    <color name="nb.read.font_4">#383429</color>
+    <color name="nb.read.font_5">#627176</color>
+
+    <color name="nb.read.bg.night">#000000</color>
+    <color name="nb.read.font_night">#99ffffff</color>
+
+    <color name="nb.read.menu.bg">#191919</color>
+    <color name="nb.read.menu.text">#CBCBCB</color>
+    <color name="nb.read.bar.translucent">#88000000</color>
+    <!--common-->
+
+    <color name="translucent">#99343434</color>
+
+
+    <color name="orange">#DE6014</color>
+
+    <color name="green">#5FB236</color>
+
+    <color name="light_pink">#fb9090</color>
+    <color name="light_white">#EEEEEE</color>
+    <color name="light_coffee">#A58D5E</color>
+    <color name="light_red">#EC4A48</color>
+    <color name="light_blue">#039BE5</color>
+    <color name="light_translucent">#23000000</color>
+    <color name="common_gray">#EEEEEE</color>
+    <color name="nb.theme.background">@color/white</color>
+</resources>
