@@ -1,6 +1,7 @@
 package com.hyjz.hnovel.bean;
 
 public class MyInfoBean {
+    private Integer automaticDeduction;//: 1
     private String area;//": null,
     private String realName;//": null,
     private String gender;//": null,
@@ -8,6 +9,14 @@ public class MyInfoBean {
     private String phoneNum;//": "15538092569",
     private Long userId;//": 565,
     private String alipayAccount;//": null
+
+    public Integer getAutomaticDeduction() {
+        return automaticDeduction;
+    }
+
+    public void setAutomaticDeduction(Integer automaticDeduction) {
+        this.automaticDeduction = automaticDeduction;
+    }
 
     public String getArea() {
         return area;

@@ -74,6 +74,46 @@ public interface ApiService {
     );
 
     /**
+     * 修改个人信息接口api/user/update
+     * access_token: oW8tU57_AQa6EZH-RMnmNJi6HzgY
+     * userId: 617
+     * gender:
+     * automaticDeduction: 1
+     */
+    @POST("/api/user/update")
+    Observable<String> changePersioninfo(
+            @Query("access_token") String sessionId,
+            @Query("userId") Long userId,
+            @Query("gender") Integer gender,
+            @Query("automaticDeduction") Integer automaticDeduction
+    );
+    /**
+     * 阅读记录/api/readlike/read/list/page
+     * pageNum: 1
+     * pageSize: 10
+     * access_token: oW8tU57_AQa6EZH-RMnmNJi6HzgY
+     */
+    @POST("/api/readlike/read/list/page")
+    Observable<String> getReadCode(
+            @Query("access_token") String sessionId,
+            @Query("pageNum") Integer pageNum,
+            @Query("pageSize") Integer pageSize
+    );
+    /**
+     * 我的消息/api/inform/list/page
+     * pageNum: 1
+     * pageSize: 10
+     * access_token: oW8tU57_AQa6EZH-RMnmNJi6HzgY
+     */
+    @POST("/api/inform/list/page")
+    Observable<String> getMessage(
+            @Query("access_token") String sessionId,
+            @Query("pageNum") Integer pageNum,
+            @Query("pageSize") Integer pageSize
+    );
+
+
+    /**
      * 意见反馈/api/advice/add
      */
     @POST("/api/advice/add")
@@ -93,9 +133,9 @@ public interface ApiService {
     );
 
     /**
-     * 我的评论/api/comment/my
+     * 我的评论/api/hai/moment/my-comments
      */
-    @POST("/api/comment/my")
+    @POST("/api/hai/moment/my-comments")
     Observable<String> myComment(
             @Query("access_token") String sessionId,
             @Query("pageNum") Integer pageNum,
@@ -238,6 +278,7 @@ public interface ApiService {
             @Query("chapterCoin") Integer chapterCoin,
             @Query("chapterId") Long chapterId
     );
+
     /**
      * 获取章节api/chapter/list/page
      * pageNum: 1
@@ -251,6 +292,7 @@ public interface ApiService {
             @Query("pageSize") Integer pageSize,
             @Query("bookId") Long bookId
     );
+
     /**
      * 小说阅读界面api/chapter/detail
      * chapterCoin: 0
@@ -265,8 +307,9 @@ public interface ApiService {
 
     /**
      * 获取书籍的章节总列表
+     *
      * @param bookId
-     * @param view 默认参数为:chapters
+     * @param view   默认参数为:chapters
      * @return
      */
     @GET("mix-atoc/{bookId}")
@@ -276,6 +319,7 @@ public interface ApiService {
     /**
      * 章节的内容
      * 这里采用的是同步请求。
+     *
      * @param url
      * @return
      */
@@ -284,6 +328,7 @@ public interface ApiService {
 
     /**
      * 书籍详情
+     *
      * @param bookId
      * @return
      */

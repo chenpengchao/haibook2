@@ -9,6 +9,8 @@
 
    <!--首页-->
     <include layout="@layout/title_layout" />
+    <include layout="@layout/webview_started"></include>
+    <include layout="@layout/webview_error"></include>
     <ProgressBar
         android:id="@+id/ProgressBar"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"

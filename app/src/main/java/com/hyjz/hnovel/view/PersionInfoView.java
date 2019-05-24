@@ -6,5 +6,6 @@ import com.hyjz.hnovel.bean.MyInfoBean;
 public interface PersionInfoView extends BaseView {
     void onSucess(MyInfoBean bean);
 
+    void onChangeSucess();
     void failue();
 }

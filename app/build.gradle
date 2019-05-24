@@ -82,7 +82,6 @@ dependencies {
     implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
     //log
     implementation 'com.github.nukc.stateview:library:1.2.1'
-//    implementation 'com.github.nukc.stateview:library:0.3.2'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.hikvision.ezviz:ezuikit:2.0'
     implementation 'com.github.chaychan:SlideCloseLib:1.0.0'

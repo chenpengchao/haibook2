@@ -81,6 +81,7 @@
         <activity android:name=".activity.ReadAc"></activity>
         <activity android:name=".activity.ReadActivity" ></activity>
         <activity android:name=".activity.MoreSettingActivity" ></activity>
+        <activity android:name=".activity.ShowWebNewAc" />
     </application>
 
 </manifest>

@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -24,15 +26,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hyjz.hnovel.BuildConfig;
 import com.hyjz.hnovel.MainActivity;
 import com.hyjz.hnovel.R;
@@ -49,6 +58,7 @@ import com.hyjz.hnovel.ireader.model.bean.BookDetailBean;
 import com.hyjz.hnovel.ireader.model.bean.CollBookBean;
 import com.hyjz.hnovel.utils.DownPicUtil;
 import com.hyjz.hnovel.utils.ItemLongClickedPopWindow;
+import com.hyjz.hnovel.utils.NetUtils;
 import com.hyjz.hnovel.utils.SizeUtil;
 import com.hyjz.hnovel.weight.SlowlyProgressBar;
 
@@ -59,6 +69,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.Date;
@@ -71,14 +82,14 @@ import wendu.dsbridge.OnReturnValue;
 import static android.app.Activity.RESULT_OK;
 
 
-public class FirstFm extends BaseFragment {
+public class FirstFm extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.title)
     TextView title;
 
-//    private String mUrl="http://www.haishuwu.com/" ;
-    private String mUrl=" http://192.168.0.106:8085/" ;
+    private String mUrl="http://www.haishuwu.com/" ;
+//    private String mUrl=" http://192.168.0.106:8085/" ;
     //    private Context mContext;
     public static DWebView mWebView;
     // 长按查看图片
@@ -102,6 +113,9 @@ public class FirstFm extends BaseFragment {
     private SlowlyProgressBar slowlyProgressBar;
     public static final String EXTRA_COLL_BOOK = "extra_coll_book";
     public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
+    ImageView imageView;
+    LinearLayout webviewError;
+    LinearLayout linearLayout;
 
     @Override
     protected int provideContentViewId() {
@@ -122,6 +136,10 @@ public class FirstFm extends BaseFragment {
     @Override
     public void initView(View v) {
         super.initView(v);
+        linearLayout= (LinearLayout)v. findViewById(R.id.web_started);
+        imageView= (ImageView)v. findViewById(R.id.started_gif);
+        webviewError=(LinearLayout)v.findViewById(R.id.webview_error);
+        v.findViewById(R.id.webview_onclick).setOnClickListener(this);
         back.setVisibility(View.INVISIBLE);
         title.setText("首页");
 //        mContext = getActivity();
@@ -155,6 +173,8 @@ public class FirstFm extends BaseFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initview(View v) {
+//        Glide.with(mContext).load(R.mipmap.loading_circle).into(imageView);
+
         JsApi api = new JsApi();
 //        mUrl = mContext.getIntent().getStringExtra("url");
 
@@ -193,6 +213,7 @@ public class FirstFm extends BaseFragment {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         webSettings.setAppCacheEnabled(true);
+        webSettings.setAppCacheMaxSize(1024 * 1024 * 25);//设置缓冲大小，我设的是8M
         webSettings.setDatabaseEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setSupportZoom(true);
@@ -201,10 +222,128 @@ public class FirstFm extends BaseFragment {
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setDatabaseEnabled(true);
         webSettings.setGeolocationEnabled(true);
-
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        } else {
+            webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        }
 //        mWebView.setWebViewClient(new NoAdWebViewClient(mContext,mUrl));
-        mWebView.setWebViewClient(new MyWebViewClient2(mContext,slowlyProgressBar));
-//        mWebView.setWebViewClient(new MyWebViewClient1(mContext));
+//        mWebView.setWebViewClient(new MyWebViewClient2(mContext,slowlyProgressBar));
+        mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                super.onLoadResource(view, url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                view.getSettings().setJavaScriptEnabled(true);
+                super.onPageFinished(view, url);
+                linearLayout.setVisibility(View.GONE);
+//        view.loadUrl("javascript:java_obj.showSource(document.documentElement.outerHTML);");
+                addImageClickListener(view);//待网页加载完全后设置图片点击的监听方法
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                view.getSettings().setJavaScriptEnabled(true);
+                slowlyProgressBar.onProgressStart();
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                webviewError.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//        super.onReceivedSslError(view, handler, error);
+//        handler.proceed();
+                if (error.getPrimaryError() == android.net.http.SslError.SSL_INVALID) {// 校验过程遇到了bug
+                    handler.proceed();
+                } else {
+                    handler.cancel();
+                }
+
+            }
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+
+                return super.shouldInterceptRequest(view, request);
+            }
+
+            private void addImageClickListener(WebView webView) {
+                webView.loadUrl("javascript:(function(){" +
+                        "var objs = document.getElementsByTagName(\"img\"); " +
+                        "for(var i=0;i<objs.length;i++)  " +
+                        "{"
+                        + "    objs[i].onclick=function()  " +
+                        "    {  "
+                        + "        window.imagelistener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
+                        "    }  " +
+                        "}" +
+                        "})()");
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+
+                WebView.HitTestResult hit = view.getHitTestResult();
+                if (hit != null) {
+                    int hitType = hit.getType();
+                    if (hitType == WebView.HitTestResult.SRC_ANCHOR_TYPE
+                            || hitType == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {// 点击超链接
+                        if (url.contains("yongka")) {
+                            view.loadUrl(url);
+                        } else if (url.equals("https://yongkajun.com/hkj/")) {
+                            view.loadUrl(url);
+                        } else {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                           startActivity(i);
+                        }
+
+                    } else {
+                        if (url.startsWith("mailto://") || url.startsWith("tel://")) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(intent);
+                            return true;
+                        } else if (url.startsWith("https://wx.tenpay.com")) {
+                            return false;
+                        } else if (url.startsWith("weixin://") || url.startsWith("alipays://")) {
+                            Intent intent;
+                            try {
+                                intent = Intent.parseUri(url,
+                                        Intent.URI_INTENT_SCHEME);
+                                intent.addCategory("android.intent.category.BROWSABLE");
+                                intent.setComponent(null);
+                                // intent.setSelector(null);
+                               startActivity(intent);
+                            } catch (URISyntaxException e) {
+                                return false;
+//                        e.printStackTrace();
+                            }
+
+                        } else if (url.startsWith("https://") || url.startsWith("http://")) {
+                            view.loadUrl(url);
+//                    view.stopLoading();
+                            return true;
+                        } else {
+                            view.loadUrl(url);
+                        }
+
+                    }
+                } else {
+                    view.loadUrl(url);
+                }
+                return false;
+
+            }
+        });
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -462,6 +601,17 @@ public class FirstFm extends BaseFragment {
         }
     };
 
+    @Override
+    public void onClick(View v) {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {//网络是否连接
+            Toast.makeText(mContext,"请检查网络连接",Toast.LENGTH_LONG).show();
+        }else{
+            mWebView.loadUrl(mUrl);
+            webviewError.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+
+        }
+    }
 
 
     /***

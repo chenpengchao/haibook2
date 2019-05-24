@@ -4,22 +4,33 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hyjz.hnovel.MainActivity;
 import com.hyjz.hnovel.R;
+import com.hyjz.hnovel.app.MyApp;
 import com.hyjz.hnovel.base.BaseActivity;
 import com.hyjz.hnovel.base.BasePresenter;
 import com.hyjz.hnovel.bean.MyInfoBean;
 import com.hyjz.hnovel.presenter.PersionInfoPresenter;
 import com.hyjz.hnovel.utils.SharedPreferencesHelper;
 import com.hyjz.hnovel.utils.ToastUtil;
+import com.hyjz.hnovel.utils.Util;
 import com.hyjz.hnovel.view.PersionInfoView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> implements PersionInfoView {
+    @BindView(R.id.back)
+    ImageView back;
+    @BindView(R.id.title)
+    TextView title;
     //真实姓名
     @BindView(R.id.tv_myinfo_name)
     TextView tv_myinfo_name;
@@ -45,8 +56,34 @@ public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> i
     //退出账户
     @BindView(R.id.tv_quit)
     TextView tv_quit;
+    @BindView(R.id.ll_gender)
+    LinearLayout ll_gender;
+    @BindView(R.id.ll_auto_buy)
+    LinearLayout ll_auto_buy;
+    @BindView(R.id.tv_myinfo_auto)
+    TextView tv_myinfo_auto;
+    //性别
+    private String selectSex;
+    private ArrayList<String> list = new ArrayList<>();
+    //选择性别、
+    private String[] a = {"男", "女"};
+    Integer gender=0;
+    //自动购买
+    private String isAuto;
+    private ArrayList<String> listAuto = new ArrayList<>();
+    //选择性别、
+    private String[] b = {"是", "否"};
+    Integer auto=0;
+
     @Override
     public void initView() {
+        title.setText("个人信息");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mPresenter.getInfo();
     }
 
@@ -62,17 +99,18 @@ public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> i
 
     @Override
     public void showLoading(String title) {
-
+        showDialog();
     }
 
     @Override
     public void stopLoading() {
-
+        dismissDialog();
     }
 
     @Override
     public void showErrorTip(String msg) {
-
+        dismissDialog();
+        ToastUtil.showShort(mContext,msg.trim().toString()+"");
     }
 
     @Override
@@ -98,7 +136,12 @@ public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> i
             }
 //            性别
             if (bean.getGender() != null) {
-                tv_myinfo_gender.setText(bean.getGender() + "");
+                if (bean.getGender().equals("0")) {
+                    tv_myinfo_gender.setText("男");
+                } else {
+                    tv_myinfo_gender.setText("女");
+                }
+
 
             } else {
                 tv_myinfo_gender.setText("");
@@ -115,11 +158,24 @@ public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> i
             } else {
                 tv_alipay_withdraw.setText("");
             }
+            if (bean.getAutomaticDeduction() != null) {
+                if (bean.getAutomaticDeduction() == 1) {
+                    tv_myinfo_auto.setText("是");
+                } else {
+                    tv_myinfo_auto.setText("否");
+                }
+            }
         }
 
     }
+
+    @Override
+    public void onChangeSucess() {
+        ToastUtil.showShort(mContext,"修改成功");
+    }
+
     //点击事件
-    @OnClick({R.id.tv_qiehuan,R.id.tv_quit})
+    @OnClick({R.id.tv_qiehuan,R.id.tv_quit,R.id.ll_gender,R.id.ll_auto_buy})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.tv_qiehuan:
@@ -135,6 +191,46 @@ public class PersionalInformationAc extends BaseActivity<PersionInfoPresenter> i
                 startActivity(intent);
                 MainActivity.instance.finish();
                 finish();
+                break;
+            case R.id.ll_gender:
+                list.clear();
+                for (int i = 0; i < Arrays.asList(a).size(); i++) {
+                    list.add( Arrays.asList(a).get(i));
+                }
+                Util.alertBottomWheelOption(mContext, list, new Util.OnWheelViewClick() {
+                    @Override
+                    public void onClick(View view, int postion) {
+                        selectSex = list.get(postion);
+                        if (selectSex.equals("男")) {
+                            gender = 0;
+                        } else {
+                            gender = 1;
+                        }
+
+                        tv_myinfo_gender.setText(selectSex);
+                        mPresenter.changeInfo(MyApp.getInstance().getUserId(),gender,null);
+                    }
+                });
+                break;
+            case R.id.ll_auto_buy:
+                listAuto.clear();
+                for (int i = 0; i < Arrays.asList(b).size(); i++) {
+                    listAuto.add( Arrays.asList(b).get(i));
+                }
+                Util.alertBottomWheelOption(mContext, listAuto, new Util.OnWheelViewClick() {
+                    @Override
+                    public void onClick(View view, int postion) {
+                        isAuto = listAuto.get(postion);
+                        if (isAuto.equals("否")) {
+                            auto = 0;
+                        } else {
+                            auto = 1;
+                        }
+
+                        tv_myinfo_auto.setText(isAuto);
+                        mPresenter.changeInfo(MyApp.getInstance().getUserId(),null,auto);
+                    }
+                });
                 break;
         }
     }

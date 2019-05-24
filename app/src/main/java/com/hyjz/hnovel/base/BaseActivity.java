@@ -1,7 +1,9 @@
 package com.hyjz.hnovel.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -14,8 +16,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.chaychan.lib.SlidingLayout;
 import com.github.nukc.stateview.StateView;
@@ -120,6 +125,8 @@ public abstract class BaseActivity<T extends BasePresenter>  extends AppCompatAc
         SetStatusBarColor();
 
     }
+
+
     protected void gone(final View... views) {
         if (views != null && views.length > 0) {
             for (View view : views) {

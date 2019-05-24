@@ -15,10 +15,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hyjz.hnovel.R;
 import com.hyjz.hnovel.adapter.MyCommentAdapter;
+import com.hyjz.hnovel.adapter.MyMessageAdapter;
 import com.hyjz.hnovel.base.BaseActivity;
 import com.hyjz.hnovel.base.BasePresenter;
+import com.hyjz.hnovel.bean.MyCommentBean;
 import com.hyjz.hnovel.presenter.MyCommentPresenter;
 import com.hyjz.hnovel.view.MyCommentView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
 import java.util.List;
 
@@ -29,85 +34,82 @@ import butterknife.OnClick;
  * 我的评论
  */
 public class MyCommentAc extends BaseActivity<MyCommentPresenter> implements MyCommentView {
-    private int num = 1;
-    //标题
     @BindView(R.id.title)
     TextView title;
-    //返回键
     @BindView(R.id.back)
     ImageView back;
-    //下拉刷新控件
-    @BindView(R.id.swipeLayout)
-    SwipeRefreshLayout swipeLayout;
-    //列表控件
-    @BindView(R.id.rv_my_comment_list)
-    RecyclerView rv_my_comment_list;
-    //adapter
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    private int mPage = 1;
+    private static final int PAGE_SIZE = 15;
     MyCommentAdapter mAdapter;
     @Override
     public void initView() {
         title.setText("我的评论");
-        mPresenter.myComment(num);
-        swipeLayout.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rv_my_comment_list.setLayoutManager(new LinearLayoutManager(this));
-        swipeLayout.setRefreshing(true);
-        initAdapter();
-        initRefreshLayout();
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
-    }
-    private void initAdapter() {
-        mAdapter = new MyCommentAdapter();
-
-
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        initRecycler();
+        loaddata();
+        initRefresh();
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLoadMoreRequested() {
-                loadMore();
-            }
-        });
-        mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-//        mAdapter.setPreLoadNumber(3);
-        rv_my_comment_list.setAdapter(mAdapter);
-
-        rv_my_comment_list.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Toast.makeText(mContext, Integer.toString(position), Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                finish();
             }
         });
     }
-    private void initRefreshLayout() {
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    /**
+     * time    : 2019/3/14 11:24
+     * desc    : 初始化上拉刷新, 下拉加载更多
+     * versions: 1.0
+     * 255,69,0
+     */
+    private void initRefresh() {
+
+        mRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
-            public void onRefresh() {
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                mPage++;
+                loaddata();
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
                 refresh();
             }
         });
+
     }
 
+    /**
+     * time    : 2019/3/28 11:22
+     * desc    : 刷新列表
+     * versions: 1.0
+     */
     private void refresh() {
-        num = 1;
-        mAdapter.setEnableLoadMore(false);//这里的作用是防止下拉刷新的时候还可以上拉加载
-        mPresenter.myComment(num);
-//        new Request(mNextRequestPage, new RequestCallBack() {
-//            @Override
-//            public void success(List<Status> data) {
-//                setData(true, data);
-//                mAdapter.setEnableLoadMore(true);
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//
-//            @Override
-//            public void fail(Exception e) {
-//                Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-//                mAdapter.setEnableLoadMore(true);
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//        }).start();
+        mPage = 1;
+        mAdapter.getData().clear();
+        loaddata();
     }
-    private void loadMore() {
-        num++;
-        mPresenter.myComment(num);
+
+    public void loaddata() {
+
+
+        mPresenter.myComment(mPage);
+
+    }
+
+    /**
+     * time    : 2019/3/14 11:24
+     * desc    : 初始化列表
+     * versions: 1.0
+     */
+    private void initRecycler() {
+        mAdapter = new MyCommentAdapter();
+
+        recyclerView.setAdapter(mAdapter);
     }
     @Override
     protected MyCommentPresenter createPresenter() {
@@ -134,11 +136,20 @@ public class MyCommentAc extends BaseActivity<MyCommentPresenter> implements MyC
 
     @Override
     public void stopLoading() {
-
+        mRefreshLayout.finishRefresh();
+        mRefreshLayout.finishLoadmore();
     }
 
     @Override
     public void showErrorTip(String msg) {
+        mRefreshLayout.finishRefresh();
+        mRefreshLayout.finishLoadmore();
+    }
+
+    @Override
+    public void onCommentSuccess(MyCommentBean b) {
+        mRefreshLayout.setLoadmoreFinished(b.getList().size() < PAGE_SIZE);
+        mAdapter.addData(b.getList());
 
     }
 }

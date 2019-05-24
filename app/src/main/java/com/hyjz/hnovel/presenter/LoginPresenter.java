@@ -59,7 +59,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        mView.stopLoading();
                     }
 
                     @Override
@@ -68,73 +68,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                             LoginBean bean = b.getResult();
                             mView.success(bean);
                         }
-//                        if (b.isSuccess() == true) {
-//                            if (b.getIs_black() == 2) {
-//                                ToastUtil.showShort(mContext, b.getErrorMsg() + "");
-//                                return;
-//                            }
-//                            ToastUtil.showShort(mContext, "登录成功");
-//                            stogeUser(b.getHeadImg());
-////                            ToastUtil.showShort(mContext,b.getErrorMsg());
-////                            SharedPreferencesHelper.remove("token");
-//                            MyApp.getContext().setNickName(b.getNickName());
-//                            MyApp.getContext().setAgentId(b.getId());
-//                            MyApp.getContext().setHeadImage1(b.getHeadImg());
-//                            MyApp.getContext().setHeadImageshift(b.getHeadImg());
-//                            MyApp.getContext().setRongToken(b.getRcloudToken());
-//                            MyApp.getContext().setIsAdmin(b.getIs_admin());
-//                            MyApp.getContext().setIsBlack(b.getIs_black());
-////                            if (b.getAgentType()!=null){
-////                                MyApp.getInstance().setJuese(b.getAgentType());
-////                            }
-//
-//
-////                            MyApp.getInstance().setIsVip(0);
-//                            if (b.getIs_vip() != null) {
-//                                MyApp.getInstance().setIsVip(b.getIs_vip());
-//                            }
-//
-//                            MyApp.getContext().setToken(b.getAccess_token().toString().trim());
-////                MyApp.getInstance().setToken("24a54cde-03c0-4545-9656-434a533abfa5");
-//
-//                            MyApp.getInstance().setUserName(phone);
-//                            MyApp.getInstance().setPassWord(password);
-//                            getMineParam();
-//                            startActivity(new Intent(mContext, MainActivity.class));
-//                            EventBus.getDefault().post("refreshMinefm","refreshMinefm");
-//                            finish();
-//                if (MyApp.getInstance().getToken() != null) {
-//                    RongIM.connect(MyApp.getInstance().getToken(), new RongIMClient.ConnectCallback() {
-//                        @Override
-//                        public void onTokenIncorrect() {
-//                            Log.e(TAG, "reToken Incorrect");
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(String s) {
-//
-////                            connectResultId = s;
-////                            NLog.e("connect", "onSuccess userid:" + s);
-////                            editor.putString(SealConst.SEALTALK_LOGIN_ID, s);
-////                            editor.commit();
-////                            SealUserInfoManager.getInstance().openDB();
-////                            request(SYNC_USER_INFO, true);
-//                        }
-//
-//                        @Override
-//                        public void onError(RongIMClient.ErrorCode e) {
-//
-//                        }
-//                    });
-//                }
-
-//                SharedPreferencesHelper.saveString("loginphone", phone);
-
-//                            SharedPreferencesHelper.saveString("token",b.getAccess_token().toString().trim());
-
-
-//                        }
-//
                     }
                 });
     }

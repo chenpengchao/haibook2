@@ -3,6 +3,7 @@ package com.hyjz.hnovel.presenter;
 import com.hyjz.hnovel.app.MyApp;
 import com.hyjz.hnovel.base.BasePresenter;
 import com.hyjz.hnovel.bean.BaseBean;
+import com.hyjz.hnovel.bean.MyCommentBean;
 import com.hyjz.hnovel.utils.GsonUtils;
 import com.hyjz.hnovel.view.MyCommentView;
 
@@ -14,8 +15,8 @@ public class MyCommentPresenter extends BasePresenter<MyCommentView> {
     }
     public void myComment(Integer num) {
         mView.showLoading("加载中...");
-        addSubscription(mApiService.myComment(MyApp.getInstance().getToken(),num, 10).map((str) -> GsonUtils.fromJson(str, String.class)),
-                new Subscriber<BaseBean<String>>() {
+        addSubscription(mApiService.myComment(MyApp.getInstance().getToken(),num, 10).map((str) -> GsonUtils.fromJson(str, MyCommentBean.class)),
+                new Subscriber<BaseBean<MyCommentBean>>() {
                     @Override
                     public void onCompleted() {
                         mView.stopLoading();
@@ -27,9 +28,10 @@ public class MyCommentPresenter extends BasePresenter<MyCommentView> {
                     }
 
                     @Override
-                    public void onNext(BaseBean<String> b) {
+                    public void onNext(BaseBean<MyCommentBean> b) {
                         if (b.getMessage().equals("SUCCESS")) {
-//                            mView.onSuccess();
+                            mView.onCommentSuccess(b.getResult());
+
                         }
                     }
                 });

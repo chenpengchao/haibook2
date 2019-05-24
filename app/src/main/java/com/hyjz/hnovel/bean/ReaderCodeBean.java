@@ -3,7 +3,7 @@ package com.hyjz.hnovel.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyCommentBean {
+public class ReaderCodeBean {
     private Integer endRow;//: 10
     private Integer firstPage;//: 1
     private boolean hasNextPage;//: true
@@ -11,7 +11,7 @@ public class MyCommentBean {
     private boolean isFirstPage;//: true
     private boolean isLastPage;//: false
     private Integer lastPage;//: 2
-    private List<CommentListBean> list;//:// [{likeStaus: 0, lastChapterTitle: "第259章 去追啊（完）", bookStatus: 2, hasNew: false,…},…]
+    private List<ReadCodeListBean> list;//:// [{likeStaus: 0, lastChapterTitle: "第259章 去追啊（完）", bookStatus: 2, hasNew: false,…},…]
     private Integer navigateFirstPage;//: 1
     private Integer navigateLastPage;//: 2
     private Integer navigatePages;//: 8
@@ -26,55 +26,40 @@ public class MyCommentBean {
     private Integer startRow;//: 1
     private Integer total;//: 19
 
-    public static class CommentListBean {
-        private String agentLevelName;//: "嗨赚Lv2"
-        private Integer agentLevelNo;//: 2
-        private Integer auditStatus;//: 1
-        private Long bookId;//: 1896
-        private String bookName;//: "《异世之古道武帝》"
-        private Long commentId;//: 45
-        private Integer commentNum;//: 0
-        private String commentorHeadImg;//: "http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKoVn29tXiaGc3tCnovDOk5FXdPkA68iapZDKkm8zCyBXn7Xj8nOdVBxicQSSmWdF4ZtUguvVsGfnwbQ/132"
-        private Long commentorId;//: 617
-        private String commentorName;//: "达人君"
-        private Integer commentorSex;//: 1
-        private String content;//: "不错！"
-        private Long createTime;//: 1555569566000
-        private Integer isVip;//: 0
-        private Long readDueTime;//: 1558155735000
-        private String rejectReason;//: null
-        private String title;//: null
-        private Integer viewNum;//: 5
+    public static class ReadCodeListBean {
+        private String authorName;//: "拾巳"
+        private String bookCover;//: "http://kwayxiaoshuo.oss-cn-beijing.aliyuncs.com/b6df6121-80a2-417e-be04-88a4548646cd"
+        private Integer bookId;//: 1502
+        private String bookName;//: "乡村奇门医圣"
+        private Integer bookStatus;//: 2
+        private boolean hasNew;//: false
+        private String lastChapterTitle;//: "第259章 去追啊（完）"
+        private Integer likeStaus;//: 0
+        private Integer readLikeId;//: 1995
+        private String readingChapterOrder;//: "阅读至5章"
+        private String updateTime;//: "更新于4个月前"
 
-        public String getAgentLevelName() {
-            return agentLevelName;
+        public String getAuthorName() {
+            return authorName;
         }
 
-        public void setAgentLevelName(String agentLevelName) {
-            this.agentLevelName = agentLevelName;
+        public void setAuthorName(String authorName) {
+            this.authorName = authorName;
         }
 
-        public Integer getAgentLevelNo() {
-            return agentLevelNo;
+        public String getBookCover() {
+            return bookCover;
         }
 
-        public void setAgentLevelNo(Integer agentLevelNo) {
-            this.agentLevelNo = agentLevelNo;
+        public void setBookCover(String bookCover) {
+            this.bookCover = bookCover;
         }
 
-        public Integer getAuditStatus() {
-            return auditStatus;
-        }
-
-        public void setAuditStatus(Integer auditStatus) {
-            this.auditStatus = auditStatus;
-        }
-
-        public Long getBookId() {
+        public Integer getBookId() {
             return bookId;
         }
 
-        public void setBookId(Long bookId) {
+        public void setBookId(Integer bookId) {
             this.bookId = bookId;
         }
 
@@ -86,108 +71,60 @@ public class MyCommentBean {
             this.bookName = bookName;
         }
 
-        public Long getCommentId() {
-            return commentId;
+        public Integer getBookStatus() {
+            return bookStatus;
         }
 
-        public void setCommentId(Long commentId) {
-            this.commentId = commentId;
+        public void setBookStatus(Integer bookStatus) {
+            this.bookStatus = bookStatus;
         }
 
-        public Integer getCommentNum() {
-            return commentNum;
+        public boolean isHasNew() {
+            return hasNew;
         }
 
-        public void setCommentNum(Integer commentNum) {
-            this.commentNum = commentNum;
+        public void setHasNew(boolean hasNew) {
+            this.hasNew = hasNew;
         }
 
-        public String getCommentorHeadImg() {
-            return commentorHeadImg;
+        public String getLastChapterTitle() {
+            return lastChapterTitle;
         }
 
-        public void setCommentorHeadImg(String commentorHeadImg) {
-            this.commentorHeadImg = commentorHeadImg;
+        public void setLastChapterTitle(String lastChapterTitle) {
+            this.lastChapterTitle = lastChapterTitle;
         }
 
-        public Long getCommentorId() {
-            return commentorId;
+        public Integer getLikeStaus() {
+            return likeStaus;
         }
 
-        public void setCommentorId(Long commentorId) {
-            this.commentorId = commentorId;
+        public void setLikeStaus(Integer likeStaus) {
+            this.likeStaus = likeStaus;
         }
 
-        public String getCommentorName() {
-            return commentorName;
+        public Integer getReadLikeId() {
+            return readLikeId;
         }
 
-        public void setCommentorName(String commentorName) {
-            this.commentorName = commentorName;
+        public void setReadLikeId(Integer readLikeId) {
+            this.readLikeId = readLikeId;
         }
 
-        public Integer getCommentorSex() {
-            return commentorSex;
+        public String getReadingChapterOrder() {
+            return readingChapterOrder;
         }
 
-        public void setCommentorSex(Integer commentorSex) {
-            this.commentorSex = commentorSex;
+        public void setReadingChapterOrder(String readingChapterOrder) {
+            this.readingChapterOrder = readingChapterOrder;
         }
 
-        public String getContent() {
-            return content;
+        public String getUpdateTime() {
+            return updateTime;
         }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public Long getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(Long createTime) {
-            this.createTime = createTime;
-        }
-
-        public Integer getIsVip() {
-            return isVip;
-        }
-
-        public void setIsVip(Integer isVip) {
-            this.isVip = isVip;
-        }
-
-        public Long getReadDueTime() {
-            return readDueTime;
-        }
-
-        public void setReadDueTime(Long readDueTime) {
-            this.readDueTime = readDueTime;
-        }
-
-        public String getRejectReason() {
-            return rejectReason;
-        }
-
-        public void setRejectReason(String rejectReason) {
-            this.rejectReason = rejectReason;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public Integer getViewNum() {
-            return viewNum;
-        }
-
-        public void setViewNum(Integer viewNum) {
-            this.viewNum = viewNum;
+        public void setUpdateTime(String updateTime) {
+            this.updateTime = updateTime;
         }
     }
 
@@ -247,11 +184,11 @@ public class MyCommentBean {
         this.lastPage = lastPage;
     }
 
-    public List<CommentListBean> getList() {
+    public List<ReadCodeListBean> getList() {
         return list;
     }
 
-    public void setList(List<CommentListBean> list) {
+    public void setList(List<ReadCodeListBean> list) {
         this.list = list;
     }
 

@@ -305,17 +305,17 @@ public class LoginAc extends BaseActivity<LoginPresenter> implements LoginView, 
 
     @Override
     public void error() {
-
+        dismissDialog();
     }
 
     @Override
     public void showLoading(String title) {
-
+        showDialog();
     }
 
     @Override
     public void stopLoading() {
-
+        dismissDialog();
     }
 
     @Override

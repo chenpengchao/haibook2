@@ -19,7 +19,9 @@ import com.hyjz.hnovel.activity.MyCommentAc;
 import com.hyjz.hnovel.activity.MyMessageAc;
 import com.hyjz.hnovel.activity.MyWalletAc;
 import com.hyjz.hnovel.activity.PersionalInformationAc;
+import com.hyjz.hnovel.activity.ReaderCodeAc;
 import com.hyjz.hnovel.activity.RechargeAc;
+import com.hyjz.hnovel.activity.ShowWebNewAc;
 import com.hyjz.hnovel.app.MyApp;
 import com.hyjz.hnovel.base.BaseFragment;
 import com.hyjz.hnovel.base.BasePresenter;
@@ -89,7 +91,12 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
     //关于嗨小说
     @BindView(R.id.fm_mine_ll_about_hi)
     LinearLayout fm_mine_ll_about_hi;
-
+    //阅读记录
+    @BindView(R.id.ll_read_code)
+    LinearLayout ll_read_code;
+    //帮助中心
+    @BindView(R.id.ll_help_center)
+    LinearLayout ll_help_center;
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -143,8 +150,8 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
 
     @OnClick({R.id.ll_mine_feedback, R.id.ll_persional_information, R.id.tv_mine_recharge,
             R.id.fm_mine_tv_cashwithdraw, R.id.ll_my_wallet, R.id.fm_mine_ll_my_book_shelf,
-            R.id.fm_mine_ll_my_message, R.id.fm_mine_ll_my_comment,R.id.fm_mine_ll_about_hi,
-            R.id.ll_vip_show
+            R.id.fm_mine_ll_my_message, R.id.fm_mine_ll_my_comment, R.id.fm_mine_ll_about_hi,
+            R.id.ll_vip_show, R.id.ll_read_code, R.id.ll_help_center,R.id.ll_no_vip_show
     })
 
     public void onclick(View v) {
@@ -166,13 +173,21 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
                 break;
                 //提现
             case R.id.fm_mine_tv_cashwithdraw:
-                Intent intentCashWithDraw = new Intent(mContext, MyWalletAc.class);
+
+//                Intent intentCashWithDraw = new Intent(mContext, MyWalletAc.class);
+//                startActivity(intentCashWithDraw);
+                Intent intentCashWithDraw = new Intent(mContext, ShowWebNewAc.class);
+                intentCashWithDraw.putExtra("url", "http://www.haishuwu.com/myWallet");
                 startActivity(intentCashWithDraw);
                 break;
                 //我的钱包
             case R.id.ll_my_wallet:
-                Intent intentmyWallet = new Intent(mContext, MyWalletAc.class);
+
+                Intent intentmyWallet = new Intent(mContext, ShowWebNewAc.class);
+                intentmyWallet.putExtra("url", "http://www.haishuwu.com/myWallet");
                 startActivity(intentmyWallet);
+//                Intent intentmyWallet = new Intent(mContext, MyWalletAc.class);
+//                startActivity(intentmyWallet);
                 break;
                 //我的书架
             case R.id.fm_mine_ll_my_book_shelf:
@@ -197,6 +212,24 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
             case R.id.ll_vip_show:
                 Intent intentVipShow = new Intent(mContext,BeVipAc.class);
                 startActivity(intentVipShow);
+                break;
+                //阅读记录
+            case R.id.ll_read_code:
+                Intent intentReadCode = new Intent(mContext,ReaderCodeAc.class);
+                startActivity(intentReadCode);
+                break;
+                //帮助中心
+            case R.id.ll_help_center:
+                Intent intentHelp = new Intent(mContext,ShowWebNewAc.class);
+                intentHelp.putExtra("url", "http://www.haishuwu.com/helpCenter");
+                startActivity(intentHelp);
+                break;
+                //
+            case R.id.ll_no_vip_show:
+
+                Intent intentVip = new Intent(mContext,ShowWebNewAc.class);
+                intentVip.putExtra("url", "http://www.haishuwu.com/readVip");
+                startActivity(intentVip);
                 break;
         }
     }

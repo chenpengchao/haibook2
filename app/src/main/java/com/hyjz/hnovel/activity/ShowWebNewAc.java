@@ -69,12 +69,12 @@ public class ShowWebNewAc extends BaseActivity {
         tv_title.setText("用卡");
 //        iv_right = findViewById(R.id.img_right);
 //        iv_right.setImageResource(R.mipmap.iv_reload);
-        iv_right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWebView.reload();
-            }
-        });
+//        iv_right.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mWebView.reload();
+//            }
+//        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,15 +194,8 @@ public class ShowWebNewAc extends BaseActivity {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
 //        cookieManager.removeSessionCookie();// 移除旧的[可以省略]
-        // TODO: 2019/3/16  myapp中存储用户账号和密码
-//        cookieManager.setCookie(url, "phoneNumber=" + MyApp.getContext().getUserName());
-//        cookieManager.setCookie(url,"password="+getMD5Bit32(MyApp.getContext().getPassWord()));
-
-//        for (int i = 0; i < cookies.size(); i++) {
-//            HttpCookie cookie = cookies.get(i);
-//            String value = cookie.getName() + "=" + cookie.getValue();
-//            cookieManager.setCookie(url, value);
-//        }
+        cookieManager.setCookie(url, "access_token=" + MyApp.getInstance().getToken());
+        cookieManager.setCookie(url, "device=android");
         CookieSyncManager.getInstance().sync();// To get instant sync instead of waiting for the timer to trigger, the host can call this.
     }
     /**

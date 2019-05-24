@@ -21,30 +21,30 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        DownloadTaskBeanDao.createTable(db, ifNotExists);
         AuthorBeanDao.createTable(db, ifNotExists);
-        BookCommentBeanDao.createTable(db, ifNotExists);
-        CollBookBeanDao.createTable(db, ifNotExists);
-        BookHelpsBeanDao.createTable(db, ifNotExists);
-        ReviewBookBeanDao.createTable(db, ifNotExists);
-        BookRecordBeanDao.createTable(db, ifNotExists);
-        BookHelpfulBeanDao.createTable(db, ifNotExists);
         BookChapterBeanDao.createTable(db, ifNotExists);
+        BookCommentBeanDao.createTable(db, ifNotExists);
+        BookHelpfulBeanDao.createTable(db, ifNotExists);
+        BookHelpsBeanDao.createTable(db, ifNotExists);
+        BookRecordBeanDao.createTable(db, ifNotExists);
         BookReviewBeanDao.createTable(db, ifNotExists);
+        CollBookBeanDao.createTable(db, ifNotExists);
+        DownloadTaskBeanDao.createTable(db, ifNotExists);
+        ReviewBookBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        DownloadTaskBeanDao.dropTable(db, ifExists);
         AuthorBeanDao.dropTable(db, ifExists);
-        BookCommentBeanDao.dropTable(db, ifExists);
-        CollBookBeanDao.dropTable(db, ifExists);
-        BookHelpsBeanDao.dropTable(db, ifExists);
-        ReviewBookBeanDao.dropTable(db, ifExists);
-        BookRecordBeanDao.dropTable(db, ifExists);
-        BookHelpfulBeanDao.dropTable(db, ifExists);
         BookChapterBeanDao.dropTable(db, ifExists);
+        BookCommentBeanDao.dropTable(db, ifExists);
+        BookHelpfulBeanDao.dropTable(db, ifExists);
+        BookHelpsBeanDao.dropTable(db, ifExists);
+        BookRecordBeanDao.dropTable(db, ifExists);
         BookReviewBeanDao.dropTable(db, ifExists);
+        CollBookBeanDao.dropTable(db, ifExists);
+        DownloadTaskBeanDao.dropTable(db, ifExists);
+        ReviewBookBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -63,16 +63,16 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(DownloadTaskBeanDao.class);
         registerDaoClass(AuthorBeanDao.class);
-        registerDaoClass(BookCommentBeanDao.class);
-        registerDaoClass(CollBookBeanDao.class);
-        registerDaoClass(BookHelpsBeanDao.class);
-        registerDaoClass(ReviewBookBeanDao.class);
-        registerDaoClass(BookRecordBeanDao.class);
-        registerDaoClass(BookHelpfulBeanDao.class);
         registerDaoClass(BookChapterBeanDao.class);
+        registerDaoClass(BookCommentBeanDao.class);
+        registerDaoClass(BookHelpfulBeanDao.class);
+        registerDaoClass(BookHelpsBeanDao.class);
+        registerDaoClass(BookRecordBeanDao.class);
         registerDaoClass(BookReviewBeanDao.class);
+        registerDaoClass(CollBookBeanDao.class);
+        registerDaoClass(DownloadTaskBeanDao.class);
+        registerDaoClass(ReviewBookBeanDao.class);
     }
 
     public DaoSession newSession() {

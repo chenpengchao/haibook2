@@ -28,6 +28,7 @@
     <string name="manage_bookmark">管理</string>
     <string name="clear_bookmark">清除</string>
     <string name="book_read_download_error">网络异常，已取消下载</string>
+    <string name="can_not_find_version_name">找不到版本号</string>
 
 
 
