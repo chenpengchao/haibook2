@@ -24,6 +24,8 @@
     <color name="light_gray">#808080</color>
     <color name="text_grey">#AEAEAE</color>
     <color name="color_d8d8d8">#d8d8d8</color>
+    <color name="huise2">#EAECF0</color>
+    <color name="huise">#C5C7C7</color>
     <!--通用背景色-->
     <color name="common_bg">@color/white</color>
     <!--通用触摸背景色-->

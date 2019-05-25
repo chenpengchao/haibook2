@@ -6,7 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.BookCircleFm">
-    <!--嗨书圈-->
+    <!--首页-->
     <include layout="@layout/title_layout" />
+    <include layout="@layout/webview_started"></include>
+    <include layout="@layout/webview_error"></include>
+    <ProgressBar
+        android:id="@+id/ProgressBar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:progressDrawable="@drawable/progress_bg"
+        android:layout_height="3dp"
+        />
+<WebView
+    android:layout_width="match_parent"
+    android:id="@+id/webview"
+    android:layout_height="match_parent">
 
+</WebView>
 </LinearLayout>

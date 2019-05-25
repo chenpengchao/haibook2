@@ -426,12 +426,13 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-        <!--邀请好友-->
+        <!--阅读口味-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical"
+            android:id="@+id/ll_read_kouwei"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="54dp"
@@ -441,7 +442,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="邀请好友"
+                android:text="阅读口味"
                 android:textSize="12sp"
                 android:textColor="#595656"
                 android:layout_marginBottom="18dp"
@@ -498,11 +499,12 @@
             android:layout_marginLeft="52dp"
             android:layout_marginRight="15dp"
             android:layout_height="1px" />
-        <!--阅读口味-->
+        <!--邀请好友-->
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/ll_invite_friend"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="wrap_content"
@@ -514,7 +516,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:text="阅读口味"
+                android:text="邀请好友"
                 android:textSize="16sp"
                 android:textColor="#595656"
                 android:layout_marginLeft="20dp"
@@ -532,68 +534,13 @@
             android:layout_marginLeft="52dp"
             android:layout_marginRight="15dp"
             android:layout_height="1px" />
-        <!--任务赚钱-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:src="@mipmap/task_money"
-                android:layout_marginTop="23dp"
-                android:layout_marginBottom="23dp"
-                android:layout_marginLeft="15dp"
-                android:layout_height="wrap_content" />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:text="任务赚钱"
-                        android:textSize="16sp"
-                        android:textColor="#595656"
-                        android:layout_marginLeft="20dp"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:text="Lv32级"
-                        android:textSize="13sp"
-                        android:textColor="#F54337"
-                        android:layout_marginLeft="12dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="做任务赚金币，上不封顶"
-                    android:textSize="12sp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:src="@mipmap/arrow_read"
-                android:layout_marginRight="18dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:background="#EBE5E1"
-            android:layout_marginLeft="52dp"
-            android:layout_marginRight="15dp"
-            android:layout_height="1px" />
+
         <!--邀请送书券-->
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/ll_get_book_coin"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="wrap_content"
@@ -644,6 +591,7 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/ll_rise_daili"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="wrap_content"
@@ -672,6 +620,64 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="做代理，赚更多"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/arrow_read"
+                android:layout_marginRight="18dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#EBE5E1"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="1px" />
+        <!--任务赚钱-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/ll_get_money"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/task_money"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="23dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="任务赚钱"
+                        android:textSize="16sp"
+                        android:textColor="#595656"
+                        android:layout_marginLeft="20dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Lv32级"
+                        android:textSize="13sp"
+                        android:textColor="#F54337"
+                        android:layout_marginLeft="12dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="做任务赚金币，上不封顶"
                     android:textSize="12sp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="6dp"
@@ -764,6 +770,7 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/ll_is_aothor"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="wrap_content"

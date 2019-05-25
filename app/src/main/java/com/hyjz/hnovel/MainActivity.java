@@ -76,6 +76,9 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
         } else if (event.getMessage().equals("show_book_shelf")){
             SwitchTo(0);
             tabLayout.setCurrentTab(0);
+        } else if (event.getMessage().equals("show_hi_money_fm")) {
+            SwitchTo(2);
+            tabLayout.setCurrentTab(2);
         }
     }
 
@@ -239,7 +242,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                 transaction.hide(bookCircleFm);
                 transaction.hide(mineFm);
                 transaction.show(haiBookShelfFm);
-                transaction.commitAllowingStateLoss();
+                transaction.commit();
                 break;
             //美女
             case 1:
@@ -249,7 +252,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                 transaction.hide(bookCircleFm);
                 transaction.hide(mineFm);
                 transaction.hide(haiBookShelfFm);
-                transaction.commitAllowingStateLoss();
+                transaction.commit();
                 break;
             //视频
             case 2:
@@ -259,7 +262,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                 transaction.hide(bookCircleFm);
                 transaction.hide(mineFm);
                 transaction.hide(haiBookShelfFm);
-                transaction.commitAllowingStateLoss();
+                transaction.commit();
                 break;
             //关注
             case 3:
@@ -269,7 +272,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                 transaction.show(bookCircleFm);
                 transaction.hide(mineFm);
                 transaction.hide(haiBookShelfFm);
-                transaction.commitAllowingStateLoss();
+                transaction.commit();
                 break;
             case 4:
                 position = 4;
@@ -281,7 +284,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                     transaction.hide(bookCircleFm);
                     transaction.show(mineFm);
                     transaction.hide(haiBookShelfFm);
-                    transaction.commitAllowingStateLoss();
+                    transaction.commit();
                 }
 
                 break;

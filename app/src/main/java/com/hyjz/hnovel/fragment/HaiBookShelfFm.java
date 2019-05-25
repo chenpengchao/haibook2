@@ -21,6 +21,7 @@ import com.chaychan.uikit.refreshlayout.BGARefreshLayout;
 import com.hyjz.hnovel.R;
 import com.hyjz.hnovel.activity.BookDetailAc;
 import com.hyjz.hnovel.activity.ReadActivity;
+import com.hyjz.hnovel.activity.ShowWebNewAc;
 import com.hyjz.hnovel.adapter.BookShelfAdapter;
 import com.hyjz.hnovel.adapter.BookTicketConsumCodeAdapter;
 import com.hyjz.hnovel.base.BaseFragment;
@@ -119,10 +120,13 @@ public class HaiBookShelfFm extends BaseFragment<BookShelfPresenter> implements 
         iv_header_book_shelf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ReadActivity.class)
-                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected)
-                        .putExtra(ReadActivity.EXTRA_COLL_BOOK, mCollBookBean);;
-                startActivity(intent);
+                Intent intentgetBookCoin = new Intent(mContext,ShowWebNewAc.class);
+                intentgetBookCoin.putExtra("url", "http://www.haishuwu.com/bookTokenTask");
+                startActivity(intentgetBookCoin);
+//                Intent intent = new Intent(mContext, ReadActivity.class)
+//                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected)
+//                        .putExtra(ReadActivity.EXTRA_COLL_BOOK, mCollBookBean);;
+//                startActivity(intent);
             }
         });
 //        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

@@ -29,6 +29,7 @@ import com.hyjz.hnovel.bean.MessageEvent;
 import com.hyjz.hnovel.bean.MineBean;
 import com.hyjz.hnovel.presenter.MinePresenter;
 import com.hyjz.hnovel.utils.GlideUtils;
+import com.hyjz.hnovel.utils.ToastUtil;
 import com.hyjz.hnovel.view.MineView;
 import com.hyjz.hnovel.weight.CircleImageView;
 import com.hyjz.hnovel.weight.LoadingTip;
@@ -97,8 +98,24 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
     //帮助中心
     @BindView(R.id.ll_help_center)
     LinearLayout ll_help_center;
-
-
+    //阅读口味
+    @BindView(R.id.ll_read_kouwei)
+    LinearLayout ll_read_kouwei;
+    //邀请好友
+    @BindView(R.id.ll_invite_friend)
+    LinearLayout ll_invite_friend;
+    //赚钱
+    @BindView(R.id.ll_get_money)
+    LinearLayout ll_get_money;
+    //获取书币
+    @BindView(R.id.ll_get_book_coin)
+    LinearLayout ll_get_book_coin;
+    //升级代理
+    @BindView(R.id.ll_rise_daili)
+    LinearLayout ll_rise_daili;
+    //我是作者
+    @BindView(R.id.ll_is_aothor)
+    LinearLayout ll_is_aothor;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(MessageEvent event) {
         if (event.getMessage().equals("refresh_fm_mine")) {
@@ -151,7 +168,9 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
     @OnClick({R.id.ll_mine_feedback, R.id.ll_persional_information, R.id.tv_mine_recharge,
             R.id.fm_mine_tv_cashwithdraw, R.id.ll_my_wallet, R.id.fm_mine_ll_my_book_shelf,
             R.id.fm_mine_ll_my_message, R.id.fm_mine_ll_my_comment, R.id.fm_mine_ll_about_hi,
-            R.id.ll_vip_show, R.id.ll_read_code, R.id.ll_help_center,R.id.ll_no_vip_show
+            R.id.ll_vip_show, R.id.ll_read_code, R.id.ll_help_center, R.id.ll_no_vip_show, R.id.ll_read_kouwei,
+            R.id.ll_invite_friend, R.id.ll_get_money, R.id.ll_get_book_coin, R.id.ll_rise_daili,
+            R.id.ll_is_aothor
     })
 
     public void onclick(View v) {
@@ -230,6 +249,40 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
                 Intent intentVip = new Intent(mContext,ShowWebNewAc.class);
                 intentVip.putExtra("url", "http://www.haishuwu.com/readVip");
                 startActivity(intentVip);
+                break;
+                //阅读口味
+            case R.id.ll_read_kouwei:
+                Intent intentKouwei = new Intent(mContext,ShowWebNewAc.class);
+                intentKouwei.putExtra("url", "http://www.haishuwu.com/readTaste");
+                startActivity(intentKouwei);
+                break;
+            //邀请好友
+            case R.id.ll_invite_friend:
+                EventBus.getDefault().post(new MessageEvent("show_hi_money_fm"));
+                break;
+                //赚钱
+            case R.id.ll_get_money:
+                ToastUtil.showShort(mContext,"即将开放，敬请期待");
+//                Intent intentGetMoney = new Intent(mContext,ShowWebNewAc.class);
+//                intentGetMoney.putExtra("url", "http://www.haishuwu.com/readTaste");
+//                startActivity(intentGetMoney);
+                break;
+                //获取书币
+            case R.id.ll_get_book_coin:
+                Intent intentgetBookCoin = new Intent(mContext,ShowWebNewAc.class);
+                intentgetBookCoin.putExtra("url", "http://www.haishuwu.com/bookTokenTask");
+                startActivity(intentgetBookCoin);
+
+                break;
+                //省级代理
+            case R.id.ll_rise_daili:
+                Intent intentRise = new Intent(mContext,ShowWebNewAc.class);
+                intentRise.putExtra("url", "http://www.haishuwu.com/updateAgent");
+                startActivity(intentRise);
+                break;
+                //我是作者
+            case R.id.ll_is_aothor:
+                ToastUtil.showShort(mContext,"我是作者功能暂未开放");
                 break;
         }
     }
