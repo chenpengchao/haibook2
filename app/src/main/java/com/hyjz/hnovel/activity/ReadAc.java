@@ -282,6 +282,11 @@ public class ReadAc extends BaseActivity<ReadPresenter> implements ReadView {
     }
 
     @Override
+    public void addBookShelf() {
+
+    }
+
+    @Override
     public void showLoading(String title) {
 
     }

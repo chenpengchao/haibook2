@@ -30,6 +30,7 @@ public class MinePresenter extends BasePresenter<MineView> {
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.showErrorTip(e.getMessage());
 
                     }
 

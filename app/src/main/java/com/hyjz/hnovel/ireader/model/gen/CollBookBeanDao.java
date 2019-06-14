@@ -39,6 +39,7 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
         public final static Property IsUpdate = new Property(12, boolean.class, "isUpdate", false, "IS_UPDATE");
         public final static Property IsLocal = new Property(13, boolean.class, "isLocal", false, "IS_LOCAL");
         public final static Property LastChapterId = new Property(14, Long.class, "lastChapterId", false, "LAST_CHAPTER_ID");
+        public final static Property LikeStatus = new Property(15, Integer.class, "likeStatus", false, "LIKE_STATUS");
     }
 
     private DaoSession daoSession;
@@ -71,7 +72,8 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
                 "\"LAST_CHAPTER\" TEXT," + // 11: lastChapter
                 "\"IS_UPDATE\" INTEGER NOT NULL ," + // 12: isUpdate
                 "\"IS_LOCAL\" INTEGER NOT NULL ," + // 13: isLocal
-                "\"LAST_CHAPTER_ID\" INTEGER);"); // 14: lastChapterId
+                "\"LAST_CHAPTER_ID\" INTEGER," + // 14: lastChapterId
+                "\"LIKE_STATUS\" INTEGER);"); // 15: likeStatus
     }
 
     /** Drops the underlying database table. */
@@ -134,6 +136,11 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
         if (lastChapterId != null) {
             stmt.bindLong(15, lastChapterId);
         }
+ 
+        Integer likeStatus = entity.getLikeStatus();
+        if (likeStatus != null) {
+            stmt.bindLong(16, likeStatus);
+        }
     }
 
     @Override
@@ -190,6 +197,11 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
         if (lastChapterId != null) {
             stmt.bindLong(15, lastChapterId);
         }
+ 
+        Integer likeStatus = entity.getLikeStatus();
+        if (likeStatus != null) {
+            stmt.bindLong(16, likeStatus);
+        }
     }
 
     @Override
@@ -220,7 +232,8 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // lastChapter
             cursor.getShort(offset + 12) != 0, // isUpdate
             cursor.getShort(offset + 13) != 0, // isLocal
-            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14) // lastChapterId
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // lastChapterId
+            cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15) // likeStatus
         );
         return entity;
     }
@@ -242,6 +255,7 @@ public class CollBookBeanDao extends AbstractDao<CollBookBean, String> {
         entity.setIsUpdate(cursor.getShort(offset + 12) != 0);
         entity.setIsLocal(cursor.getShort(offset + 13) != 0);
         entity.setLastChapterId(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
+        entity.setLikeStatus(cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15));
      }
     
     @Override

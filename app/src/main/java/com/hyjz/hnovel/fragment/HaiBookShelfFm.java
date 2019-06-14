@@ -121,7 +121,9 @@ public class HaiBookShelfFm extends BaseFragment<BookShelfPresenter> implements 
             @Override
             public void onClick(View v) {
                 Intent intentgetBookCoin = new Intent(mContext,ShowWebNewAc.class);
+
                 intentgetBookCoin.putExtra("url", "http://www.haishuwu.com/bookTokenTask");
+                intentgetBookCoin.putExtra("title", "每日任务");
                 startActivity(intentgetBookCoin);
 //                Intent intent = new Intent(mContext, ReadActivity.class)
 //                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected)
@@ -190,10 +192,11 @@ public class HaiBookShelfFm extends BaseFragment<BookShelfPresenter> implements 
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Intent intent = new Intent(mContext, BookDetailAc.class);
-                intent.putExtra("bookId", mAdapter.getData().get(position).getBookId());
+                Intent intent = new Intent(mContext, ShowWebNewAc.class);
+                intent.putExtra("title", "详情");
+                intent.putExtra("url","http://www.haishuwu.com/detail?id="+ mAdapter.getData().get(position).getBookId());
                 startActivity(intent);
-                Toast.makeText(mContext, Integer.toString(position), Toast.LENGTH_LONG).show();
+//                Toast.makeText(mContext, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }

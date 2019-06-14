@@ -136,7 +136,7 @@ public class BookCircleFm extends BaseFragment implements View.OnClickListener {
         webviewError=(LinearLayout)v.findViewById(R.id.webview_error);
         v.findViewById(R.id.webview_onclick).setOnClickListener(this);
         back.setVisibility(View.INVISIBLE);
-        title.setText("首页");
+        title.setText("嗨书圈");
 //        mContext = getActivity();
 //        iv_right.setOnClickListener(new View.OnClickListener() {
 //            @Override

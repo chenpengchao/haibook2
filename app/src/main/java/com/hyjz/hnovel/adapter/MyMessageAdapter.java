@@ -19,7 +19,7 @@ public class MyMessageAdapter extends BaseQuickAdapter<MyMessageBean.MessageList
         cv = helper.getView(R.id.cv_message);
         cv.setImageResource( R.mipmap.systemnotice);
         //标题
-        helper.setText(R.id.tv_message_title, item.getInformTime()+"");
+        helper.setText(R.id.tv_message_title, item.getInformName()+"");
 
         //时间
         helper.setText(R.id.tv_message_time, item.getInformTime()+"");

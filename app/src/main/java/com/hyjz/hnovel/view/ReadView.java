@@ -12,4 +12,6 @@ public interface ReadView extends BaseView {
     void showChapterList();
     void finishChapter();
     void errorChapter();
+
+    void addBookShelf();
 }

@@ -1,11 +1,13 @@
 package com.hyjz.hnovel;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.google.gson.Gson;
 import com.hyjz.hnovel.activity.LoginAc;
 import com.hyjz.hnovel.activity.RegesterAc;
 import com.hyjz.hnovel.app.AppConfig;
@@ -24,6 +27,7 @@ import com.hyjz.hnovel.app.MyApp;
 import com.hyjz.hnovel.base.BaseActivity;
 import com.hyjz.hnovel.base.BasePresenter;
 import com.hyjz.hnovel.bean.LoginBean;
+import com.hyjz.hnovel.bean.MaiDianBean1;
 import com.hyjz.hnovel.bean.MessageEvent;
 import com.hyjz.hnovel.bean.TabEntity;
 import com.hyjz.hnovel.fragment.BookCircleFm;
@@ -35,17 +39,25 @@ import com.hyjz.hnovel.manager.ChangeModeController;
 import com.hyjz.hnovel.presenter.LoginPresenter;
 import com.hyjz.hnovel.presenter.MainAcPresenter;
 import com.hyjz.hnovel.utils.LogUtils;
+import com.hyjz.hnovel.utils.Md5Utils;
+import com.hyjz.hnovel.utils.NetUtils;
+import com.hyjz.hnovel.utils.NetWorkUtils;
 import com.hyjz.hnovel.utils.SharedPreferencesHelper;
+import com.hyjz.hnovel.utils.TimeUtils;
 import com.hyjz.hnovel.view.LoginView;
 import com.hyjz.hnovel.view.MainAcView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import retrofit2.http.Url;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity<LoginPresenter> implements LoginView {
@@ -62,23 +74,39 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
     private HiMoneyFm hiMoneyFm;
     private BookCircleFm bookCircleFm;
     private MineFm mineFm;
-    int position = 0;
+    int pos= 0;
     private static int tabLayoutHeight;
     Bundle savedInstance = null;
     public static MainActivity instance;
+    /**
+     * 埋点相关
+     */
+    private String fromUrl = "/";
+    private String toUrl = "";
+    private String fromId = "";
+    private String toId = "";
+    //开始时间
+    private Long startTime = 0l;
+    //结束时间
+    private Long endTime = 0l;
+    private boolean isFirst = true;
+    //停留时间
+    private Long stayTime = 0l;
+
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void message(MessageEvent event) {
         if (event.getMessage().equals("login_success")) {
             SwitchTo(0);
-            tabLayout.setCurrentTab(0);
+//            tabLayout.setCurrentTab(0);
             EventBus.getDefault().post(new MessageEvent("refresh_fm_mine"));
         } else if (event.getMessage().equals("show_book_shelf")){
             SwitchTo(0);
-            tabLayout.setCurrentTab(0);
+//            tabLayout.setCurrentTab(0);
         } else if (event.getMessage().equals("show_hi_money_fm")) {
             SwitchTo(2);
-            tabLayout.setCurrentTab(2);
+//            tabLayout.setCurrentTab(2);
         }
     }
 
@@ -110,7 +138,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
 ////        UpdateKey.DialogOrNotification=UpdateKey.WITH_DIALOG;
 //        UpdateFunGO.init(this);
         //初始化菜单
-
+        startTime = TimeUtils.getCurrentSystemTime();
             initTab();
     }
 
@@ -136,7 +164,11 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
             }
 
         }
-        initFragment(savedInstanceState);
+//        setData();
+//        initFragment(savedInstanceState);
+        isFirst = true;
+        SwitchTo(1);
+//        tabLayout.setCurrentTab(1);
         tabLayout.measure(0,0);
         tabLayoutHeight=tabLayout.getMeasuredHeight();
         //监听菜单显示或隐藏
@@ -147,6 +179,30 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
                 startAnimation(hideOrShow);
             }
         });
+
+    }
+    /**
+     * 将所有的Fragment都置为隐藏状态。
+     *
+     * @param transaction1 用于对Fragment执行操作的事务
+     */
+    @SuppressLint("NewApi")
+    private void hideFragments(FragmentTransaction transaction1) {
+        if (haiBookShelfFm != null) {
+            transaction1.hide(haiBookShelfFm);
+        }
+        if (firstFm != null) {
+            transaction1.hide(firstFm);
+        }
+        if (hiMoneyFm != null) {
+            transaction1.hide(hiMoneyFm);
+        }
+        if (bookCircleFm != null) {
+            transaction1.hide(bookCircleFm);
+        }
+        if (mineFm != null) {
+            transaction1.hide(mineFm);
+        }
     }
     /**
      * 菜单显示隐藏动画
@@ -187,6 +243,7 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
         tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                isFirst = false;
                 SwitchTo(position);
             }
             @Override
@@ -208,16 +265,17 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
             mineFm = (MineFm) getSupportFragmentManager().findFragmentByTag("mineFm");
             currentTabPosition = savedInstanceState.getInt(AppConstant.HOME_CURRENT_TAB_POSITION);
         } else {
+
             haiBookShelfFm = new HaiBookShelfFm();
             firstFm = new FirstFm();
             hiMoneyFm = new HiMoneyFm();
-            bookCircleFm = new BookCircleFm();
-            mineFm = new MineFm();
 
+            mineFm = new MineFm();
+            transaction.add(R.id.fl_body, bookCircleFm, "bookCircleFm");
             transaction.add(R.id.fl_body, haiBookShelfFm, "haiBookShelfFm");
             transaction.add(R.id.fl_body, firstFm, "firstFm");
             transaction.add(R.id.fl_body, hiMoneyFm, "hiMoneyFm");
-            transaction.add(R.id.fl_body, bookCircleFm, "bookCircleFm");
+
             transaction.add(R.id.fl_body, mineFm, "mineFm");
 //            transaction.addToBackStack(null);
             transaction.commit();
@@ -233,64 +291,125 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
     private void SwitchTo(int position) {
         LogUtils.logd("主页菜单position" + position);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideFragments(transaction);
         switch (position) {
             //首页
             case 0:
-                position =0;
-                transaction.hide(firstFm);
-                transaction.hide(hiMoneyFm);
-                transaction.hide(bookCircleFm);
-                transaction.hide(mineFm);
-                transaction.show(haiBookShelfFm);
-                transaction.commit();
+
+                pos =0;
+
+                if (haiBookShelfFm == null) {
+                    haiBookShelfFm = new HaiBookShelfFm();
+//                    jiaoliuFm = new BlackWeb();
+                    transaction.add(R.id.fl_body, haiBookShelfFm);
+                } else {
+                    transaction.show(haiBookShelfFm);
+                }
+                SwitchTo(position);
+                tabLayout.setCurrentTab(position);
+                toUrl = "/bookShelf";
+                toId = "bookShelf";
+                stayTime =(System.currentTimeMillis() - startTime)/1000;
+                startTime = System.currentTimeMillis();
+                    mPresenter.setData(setData(stayTime,startTime,fromUrl,toUrl,fromId,toId));
+                fromUrl = "/bookShelf";
+                fromId = "bookShelf";
+
                 break;
-            //美女
+            //
             case 1:
-                position = 1;
-                transaction.show(firstFm);
-                transaction.hide(hiMoneyFm);
-                transaction.hide(bookCircleFm);
-                transaction.hide(mineFm);
-                transaction.hide(haiBookShelfFm);
-                transaction.commit();
+                pos = 1;
+                if (firstFm == null) {
+                    firstFm = new FirstFm();
+//                    jiaoliuFm = new BlackWeb();
+                    transaction.add(R.id.fl_body, firstFm);
+                } else {
+                    transaction.show(firstFm);
+                }
+//                SwitchTo(position);
+                tabLayout.setCurrentTab(position);
+//
+                toUrl = "/";
+                toId = "boyChannel";
+                stayTime =(System.currentTimeMillis() - startTime)/1000;
+                startTime = System.currentTimeMillis();
+                if (isFirst == true) {
+
+                }else {
+                    mPresenter.setData(setData(stayTime, startTime, fromUrl, toUrl, fromId, toId));
+                }
+                fromUrl = "/";
+                fromId = "boyChannel";
                 break;
-            //视频
+            //
             case 2:
-                position = 2;
-                transaction.hide(firstFm);
-                transaction.show(hiMoneyFm);
-                transaction.hide(bookCircleFm);
-                transaction.hide(mineFm);
-                transaction.hide(haiBookShelfFm);
-                transaction.commit();
+                pos = 2;
+                if (hiMoneyFm == null) {
+                    hiMoneyFm = new HiMoneyFm();
+//                    jiaoliuFm = new BlackWeb();
+                    transaction.add(R.id.fl_body, hiMoneyFm);
+                } else {
+                    transaction.show(hiMoneyFm);
+                }
+//                SwitchTo(position);
+                tabLayout.setCurrentTab(position);
+                toUrl = "/haiEarn";
+                toId = "haiEarn";
+                stayTime =(System.currentTimeMillis() - startTime)/1000;
+                startTime = System.currentTimeMillis();
+                    mPresenter.setData(setData(stayTime,startTime,fromUrl,toUrl,fromId,toId));
+                fromUrl = "/haiEarn";
+                fromId = "haiEarn";
                 break;
-            //关注
+            //
             case 3:
-                position = 3;
-                transaction.hide(firstFm);
-                transaction.hide(hiMoneyFm);
-                transaction.show(bookCircleFm);
-                transaction.hide(mineFm);
-                transaction.hide(haiBookShelfFm);
-                transaction.commit();
+                pos = 3;
+                if (bookCircleFm == null) {
+                    bookCircleFm = new BookCircleFm();
+//                    jiaoliuFm = new BlackWeb();
+                    transaction.add(R.id.fl_body, bookCircleFm);
+                } else {
+                    transaction.show(bookCircleFm);
+                }
+//                SwitchTo(position);
+                tabLayout.setCurrentTab(position);
+                toUrl = "/haiMoments";
+                toId = "haiMoments";
+                stayTime =(System.currentTimeMillis() - startTime)/1000;
+                startTime = System.currentTimeMillis();
+                    mPresenter.setData(setData(stayTime,startTime,fromUrl,toUrl,fromId,toId));
+                 fromUrl = "/haiMoments";
+                fromId = "haiMoments";
                 break;
             case 4:
-                position = 4;
+                pos = 4;
                 if (MyApp.getInstance().getToken() == null) {
                     startActivity(new Intent(this, LoginAc.class));
                 } else {
-                    transaction.hide(firstFm);
-                    transaction.hide(hiMoneyFm);
-                    transaction.hide(bookCircleFm);
-                    transaction.show(mineFm);
-                    transaction.hide(haiBookShelfFm);
-                    transaction.commit();
+                    if (mineFm == null) {
+                        mineFm = new MineFm();
+//                    jiaoliuFm = new BlackWeb();
+                        transaction.add(R.id.fl_body, mineFm);
+                    } else {
+                        transaction.show(mineFm);
+                    }
+//                    SwitchTo(position);
+                    tabLayout.setCurrentTab(position);
+                    toUrl = "/personal";
+                    toId = "personal";
+                    stayTime =(System.currentTimeMillis() - startTime)/1000;
+                    startTime = System.currentTimeMillis();
+                        mPresenter.setData(setData(stayTime,startTime,fromUrl,toUrl,fromId,toId));
+                    fromUrl = "/personal";
+                    fromId = "personal";
                 }
 
                 break;
             default:
                 break;
         }
+        transaction.commit();
     }
 
     @Override
@@ -319,7 +438,8 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
         }
         Log.d("token", b.getSessionId().toString().trim());
         MyApp.getInstance().setToken(b.getSessionId().toString().trim());
-        initFragment(savedInstanceState);
+//        initFragment(savedInstanceState);
+        SwitchTo(1);
     }
 
     @Override
@@ -333,17 +453,53 @@ public class MainActivity extends BaseActivity<LoginPresenter> implements LoginV
 //            moveTaskToBack(false);
 //            return true;
 //        }
-        if (position == 1) {
+        if (pos == 1) {
             FirstFm.clickBack(keyCode, event);
             return true;
         }
-//        else if (position == 2) {
-//            HiMoneyFm.clickBack(keyCode, event);
-//            return true;
-//        } else if (position == 3) {
-//            QcodeLoanAndFriendFm.clickBack(keyCode, event);
-//            return true;
-//        }
+        else if (pos == 2) {
+            HiMoneyFm.clickBack(keyCode, event);
+            return true;
+        } else if (pos == 3) {
+           BookCircleFm.clickBack(keyCode, event);
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
+    }
+    //埋点
+    public String setData(Long staytime,Long starttime,String fromurl,String tourl,String fromid,String toid) {
+// "client":2,"ipAddr":"223.68.198.123"}
+        String s = null;
+        Gson gson = new Gson();
+        MaiDianBean1 bean1 = new MaiDianBean1();
+        bean1.setStayTime(staytime);
+        bean1.setTimestamp(starttime);
+        bean1.setMemberId(MyApp.getInstance().getUserId().intValue());
+        bean1.setFromUrl(fromurl);
+        bean1.setToUrl(tourl);
+        bean1.setFromId(Md5Utils.getMD5Str(fromid));
+        bean1.setToId(Md5Utils.getMD5Str(toid));
+        bean1.setDataType(1);
+        bean1.setNetwork(NetWorkUtils.isWifi(mContext)?1:2);
+        bean1.setBrowser("Chrome");
+        bean1.setSoftwareType(2);
+        bean1.setClient(2);
+        bean1.setIpAddr(NetWorkUtils.getLocalIpAddress());
+
+        String json = gson.toJson(bean1);
+        String a = json.replaceAll("\\\"", "%22");
+        String b = a.replaceAll("\\{", "%7B");
+        String c = b.replaceAll("\\}", "%7D");
+        String d = c.replaceAll("/", "%2F");
+
+
+//        try {
+//            s = URLEncoder.encode(json,"utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+////        String s=  Uri.encode(json,":,0-9" );
+//        Log.d("urlencoder", s);
+        return d;
     }
 }

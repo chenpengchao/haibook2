@@ -51,6 +51,7 @@ public abstract class PageLoader {
     // 默认的显示参数配置
     private static final int DEFAULT_MARGIN_HEIGHT = 28;
     private static final int DEFAULT_MARGIN_WIDTH = 15;
+//    private static final int DEFAULT_TIP_SIZE = 8;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 4;
 

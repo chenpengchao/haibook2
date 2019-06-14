@@ -70,7 +70,10 @@ public class BookTicketAc extends BaseActivity<MyBookTicketPresenter> implements
                 break;
                 //充值按钮
             case R.id.ac_ticket_book_ll_recharge:
-                Intent intent_recharge = new Intent(mContext, RechargeAc.class);
+//                Intent intent_recharge = new Intent(mContext, RechargeAc.class);
+                Intent intent_recharge = new Intent(mContext, ShowWebNewAc.class);
+                intent_recharge.putExtra("url", "http://www.haishuwu.com/rechargeCoin");
+                intent_recharge.putExtra("title", "充值");
                 startActivity(intent_recharge);
                 break;
                 //书券有效期列表

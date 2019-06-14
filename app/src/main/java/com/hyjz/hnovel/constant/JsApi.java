@@ -69,6 +69,7 @@ public class JsApi {
 
     }
 
+
     @JavascriptInterface
     public void testAsyn(Object msg, CompletionHandler<String> handler){
         handler.complete(msg+" [ asyn call]");

@@ -89,8 +89,7 @@ public class FirstFm extends BaseFragment implements View.OnClickListener {
     TextView title;
 
     private String mUrl="http://www.haishuwu.com/" ;
-//    private String mUrl="http://www.haishuwu.com/haiMoments" ;
-//    private String mUrl=" http://192.168.0.106:8085/" ;
+//    private String mUrl=" http://192.168.0.107:8085/" ;
     //    private Context mContext;
     public static DWebView mWebView;
     // 长按查看图片
@@ -196,7 +195,7 @@ public class FirstFm extends BaseFragment implements View.OnClickListener {
             @Override
             public void showInfo(BookDetailBean1.BookInfo b) {
                 Intent intent = new Intent(mContext, ReadActivity.class)
-                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, false)
+                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, b.getLikeStatus())
                         .putExtra(ReadActivity.EXTRA_COLL_BOOK,detailtoCollBook(b) );
                 startActivity(intent);
             }
@@ -357,9 +356,21 @@ public class FirstFm extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+
 //                view.getSettings().setJavaScriptEnabled(true);
                 super.onPageFinished(view, url);
+//                mWebView.hasJavascriptMethod("indexFinished",new OnReturnValue<Boolean>() {
+//                    @Override
+//                    public void onValue(Boolean retValue) {
+//                        linearLayout.setVisibility(View.GONE);
+//                        if (!retValue){
+//                            webviewError.setVisibility(View.VISIBLE);
+//
+//                        }
+//                    }
+//                });
                 linearLayout.setVisibility(View.GONE);
+                
 //        view.loadUrl("javascript:java_obj.showSource(document.documentElement.outerHTML);");
                 addImageClickListener(view);//待网页加载完全后设置图片点击的监听方法
             }
@@ -476,7 +487,7 @@ public class FirstFm extends BaseFragment implements View.OnClickListener {
         bookDetailBean.setTitle(bean.getBookName());
         bookDetailBean.setLastChapter(bean.getLastChapterTitle());
         bookDetailBean.setUpdated(bean.getUpdateTime());
-
+        bookDetailBean.setLikeStatus(bean.getLikeStatus());
 
         return bookDetailBean;
     }

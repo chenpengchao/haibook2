@@ -12,8 +12,11 @@ import com.hyjz.hnovel.api.ApiService;
 import com.hyjz.hnovel.base.BasePresenter;
 import com.hyjz.hnovel.bean.BaseBean;
 import com.hyjz.hnovel.bean.LoginBean;
+import com.hyjz.hnovel.bean.MaiDianBean1;
 import com.hyjz.hnovel.utils.GsonUtils;
 import com.hyjz.hnovel.view.LoginView;
+
+import java.net.URLEncoder;
 
 import rx.Subscriber;
 
@@ -70,5 +73,27 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         }
                     }
                 });
+    }
+    //埋点
+    public void setData(String s) {
+        addSubscription(mApiService.jsonData(s).map((str) -> GsonUtils.fromJson(str, String.class)),
+                new Subscriber<BaseBean<String>>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseBean<String> b) {
+
+                    }
+                });
+
     }
 }

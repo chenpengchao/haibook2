@@ -2,6 +2,8 @@ package com.hyjz.hnovel.adapter.hoder;
 
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hyjz.hnovel.R;
@@ -17,10 +19,12 @@ import com.hyjz.hnovel.ireader.widget.page.TxtChapter;
 public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
 
     private TextView mTvChapter;
+    private ImageView iv_lock;
 
     @Override
     public void initView() {
         mTvChapter = findById(R.id.category_tv_chapter);
+        iv_lock = findById(R.id.iv_lock);
     }
 
     @Override
@@ -48,6 +52,11 @@ public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
         mTvChapter.setTextColor(ContextCompat.getColor(getContext(),R.color.nb_text_default));
         mTvChapter.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
         mTvChapter.setText(value.getTitle());
+        if (value.getChapterCoin() > 0) {
+            iv_lock.setVisibility(View.VISIBLE);
+        } else {
+            iv_lock.setVisibility(View.GONE);
+        }
     }
 
     @Override

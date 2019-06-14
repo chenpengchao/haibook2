@@ -48,6 +48,7 @@ import com.hyjz.hnovel.presenter.ReadPresenter;
 import com.hyjz.hnovel.ireader.presenter.contract.ReadContract;
 import com.hyjz.hnovel.adapter.CategoryAdapter;
 import com.hyjz.hnovel.base.BaseMVPActivity;
+import com.hyjz.hnovel.utils.ToastUtil;
 import com.hyjz.hnovel.view.ReadView;
 import com.hyjz.hnovel.weight.ReadSettingDialog;
 import com.hyjz.hnovel.ireader.utils.BrightnessUtils;
@@ -143,6 +144,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
     private Animation mBottomOutAnim;
     private CategoryAdapter mCategoryAdapter;
     private CollBookBean mCollBook;
+    private Integer isCollect=0;
     //ButterKnife
     private Toolbar mToolbar;
     //控制屏幕常亮
@@ -225,19 +227,22 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
     protected int getContentId() {
         return R.layout.activity_read;
     }
+
     @Override
     public boolean enableSlideClose() {
         return false;
     }
+
     @Override
     public void initView() {
         super.initData(savedInstanceState);
         mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
-        isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
+        isCollect = getIntent().getIntExtra(EXTRA_IS_COLLECTED, 0);
         isNightMode = ReadSettingManager.getInstance().isNightMode();
         isFullScreen = ReadSettingManager.getInstance().isFullScreen();
 
         mBookId = mCollBook.get_id();
+//        isCollect = mCollBook.getLikeStatus();
         initToolbar();
 //        List<TxtChapter> list = new ArrayList<>();
 //
@@ -248,18 +253,20 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
 //        mPresenter.loadChapter(mCollBook.get_id(),list);
 
     }
-    private void initToolbar(){
+
+    private void initToolbar() {
         //更严谨是通过反射判断是否存在Toolbar
         mToolbar = ButterKnife.findById(this, R.id.toolbar);
-        if (mToolbar != null){
+        if (mToolbar != null) {
             supportActionBar(mToolbar);
             setUpToolbar(mToolbar);
         }
     }
-    protected ActionBar supportActionBar(Toolbar toolbar){
+
+    protected ActionBar supportActionBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
@@ -451,8 +458,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
                         if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING
                                 || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
                             mSbChapterProgress.setEnabled(false);
-                        }
-                        else {
+                        } else {
                             mSbChapterProgress.setEnabled(true);
                         }
                     }
@@ -661,16 +667,18 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
         mTopOutAnim.setDuration(200);
         mBottomOutAnim.setDuration(200);
     }
+
     Observable.Transformer schedulersTransformer() {
         return new Observable.Transformer() {
             @Override
             public Object call(Object observable) {
-                return ((Observable)  observable).subscribeOn(Schedulers.io())
+                return ((Observable) observable).subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
+
     @Override
     protected void processLogic() {
         super.processLogic();
@@ -701,7 +709,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
                                     // 如果是网络小说并被标记更新的，则从网络下载目录
                                     if (mCollBook.isUpdate() && !mCollBook.isLocal()) {
 //                                        mPresenter.loadCategory(mBookId);
-                                        mPresenter.getChapterBeanList(1,10000,Long.valueOf(mBookId));
+                                        mPresenter.getChapterBeanList(1, 20000, Long.valueOf(mBookId));
                                     }
                                 }
                             }
@@ -711,7 +719,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
         } else {
             // 从网络中获取目录
 //            mPresenter.loadCategory("53663ae356bdc93e49004474");
-            mPresenter.getChapterBeanList(1,10000,Long.valueOf(mBookId));
+            mPresenter.getChapterBeanList(1, 10000, Long.valueOf(mBookId));
         }
     }
 
@@ -755,6 +763,11 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
     }
 
     @Override
+    public void addBookShelf() {
+        ToastUtil.showShort(mContext,"加入书架成功");
+    }
+
+    @Override
     public void onBackPressed() {
         if (mAblTopMenu.getVisibility() == View.VISIBLE) {
             // 非全屏下才收缩，全屏下直接退出
@@ -771,7 +784,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
         }
 //        super.onBackPressed();
 
-        if (!mCollBook.isLocal() && !isCollected
+        if (isCollect==0
                 && !mCollBook.getBookChapters().isEmpty()) {
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("加入书架")
@@ -782,7 +795,7 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
                         //设置阅读时间
                         mCollBook.setLastRead(StringUtils.
                                 dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-
+                        mPresenter.addBookShelf(Long.valueOf(mBookId));
                         BookRepository.getInstance()
                                 .saveCollBookWithAsync(mCollBook);
 
@@ -834,9 +847,9 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
     protected void onPause() {
         super.onPause();
         mWakeLock.release();
-        if (isCollected) {
+//        if (isCollect==0) {
             mPageLoader.saveRecord();
-        }
+//        }
     }
 
     @Override
@@ -901,7 +914,6 @@ public class ReadActivity extends BaseActivity<ReadPresenter>
     public void showChapterInfo(ReadBean bean) {
 
     }
-
 
 
     @Override

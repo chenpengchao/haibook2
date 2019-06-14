@@ -165,9 +165,12 @@ public class NetPageLoader extends PageLoader {
     private void loadNextChapter() {
         if (mPageChangeListener != null) {
 
-            // 提示加载后两章
-            int begin = mCurChapterPos + 1;
-            int end = begin + 1;
+//            // 提示加载后两章
+//            int begin = mCurChapterPos + 1;
+//            int end = begin + 1;
+            // 提示加载后1章
+            int begin = mCurChapterPos ;
+            int end = begin;
 
             // 判断是否大于最后一章
             if (begin >= mChapterList.size()) {

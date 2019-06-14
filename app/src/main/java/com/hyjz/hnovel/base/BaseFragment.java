@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.github.nukc.stateview.StateView;
 import com.hyjz.hnovel.R;
+import com.hyjz.hnovel.weight.CustomDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,7 +30,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends LazyLoadFrag
     protected StateView mStateView;//用于显示加载中、网络异常，空布局、内容布局
     protected Activity mActivity;
     protected Context mContext;
-
+    private CustomDialog dialog;//进度条
     @LayoutRes
     protected abstract int getContentId();
     /**
@@ -74,6 +75,56 @@ public abstract class BaseFragment<T extends BasePresenter> extends LazyLoadFrag
             }
         }
         return rootView;
+    }
+
+    protected void gone(final View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    protected void visible(final View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+    }
+
+    protected boolean isVisible(View view) {
+        return view.getVisibility() == View.VISIBLE;
+    }
+
+    // dialog
+    public CustomDialog getDialog() {
+        if (dialog == null) {
+            dialog = CustomDialog.instance(getActivity());
+            dialog.setCancelable(true);
+        }
+        return dialog;
+    }
+
+    public void hideDialog() {
+        if (dialog != null)
+            dialog.hide();
+    }
+
+    public void showDialog() {
+        getDialog().show();
+    }
+
+    public void dismissDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 
     /**StateView的根布局，默认是整个界面，如果需要变换可以重写此方法*/

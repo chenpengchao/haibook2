@@ -116,6 +116,15 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
     //我是作者
     @BindView(R.id.ll_is_aothor)
     LinearLayout ll_is_aothor;
+    //用户id
+    @BindView(R.id.tv_id)
+    TextView tv_id;
+    //用户上级
+    @BindView(R.id.tv_shangji)
+    TextView tv_shangji;
+    //用户vip等级
+    @BindView(R.id.tv_vip_dengji_fm)
+    TextView tv_vip_dengji_fm;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(MessageEvent event) {
         if (event.getMessage().equals("refresh_fm_mine")) {
@@ -197,6 +206,7 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
 //                startActivity(intentCashWithDraw);
                 Intent intentCashWithDraw = new Intent(mContext, ShowWebNewAc.class);
                 intentCashWithDraw.putExtra("url", "http://www.haishuwu.com/myWallet");
+                intentCashWithDraw.putExtra("title", "我的钱包");
                 startActivity(intentCashWithDraw);
                 break;
                 //我的钱包
@@ -204,6 +214,7 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
 
                 Intent intentmyWallet = new Intent(mContext, ShowWebNewAc.class);
                 intentmyWallet.putExtra("url", "http://www.haishuwu.com/myWallet");
+                intentmyWallet.putExtra("title", "我的钱包");
                 startActivity(intentmyWallet);
 //                Intent intentmyWallet = new Intent(mContext, MyWalletAc.class);
 //                startActivity(intentmyWallet);
@@ -241,6 +252,7 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
             case R.id.ll_help_center:
                 Intent intentHelp = new Intent(mContext,ShowWebNewAc.class);
                 intentHelp.putExtra("url", "http://www.haishuwu.com/helpCenter");
+                intentHelp.putExtra("title", "帮助中心");
                 startActivity(intentHelp);
                 break;
                 //
@@ -248,12 +260,14 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
 
                 Intent intentVip = new Intent(mContext,ShowWebNewAc.class);
                 intentVip.putExtra("url", "http://www.haishuwu.com/readVip");
+                intentVip.putExtra("title", "嗨读VIP");
                 startActivity(intentVip);
                 break;
                 //阅读口味
             case R.id.ll_read_kouwei:
                 Intent intentKouwei = new Intent(mContext,ShowWebNewAc.class);
                 intentKouwei.putExtra("url", "http://www.haishuwu.com/readTaste");
+                intentKouwei.putExtra("title", "阅读口味");
                 startActivity(intentKouwei);
                 break;
             //邀请好友
@@ -271,13 +285,15 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
             case R.id.ll_get_book_coin:
                 Intent intentgetBookCoin = new Intent(mContext,ShowWebNewAc.class);
                 intentgetBookCoin.putExtra("url", "http://www.haishuwu.com/bookTokenTask");
+                intentgetBookCoin.putExtra("title", "每日送书币");
                 startActivity(intentgetBookCoin);
 
                 break;
-                //省级代理
+                //升级代理
             case R.id.ll_rise_daili:
                 Intent intentRise = new Intent(mContext,ShowWebNewAc.class);
                 intentRise.putExtra("url", "http://www.haishuwu.com/updateAgent");
+                intentRise.putExtra("title", "升级代理");
                 startActivity(intentRise);
                 break;
                 //我是作者
@@ -289,17 +305,18 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
 
     @Override
     public void showLoading(String title) {
-
+        showDialog();
     }
 
     @Override
     public void stopLoading() {
-
+        dismissDialog();
     }
 
     @Override
     public void showErrorTip(String msg) {
-
+        ToastUtil.showShort(mContext,msg);
+        dismissDialog();
     }
 
     @Override
@@ -337,12 +354,29 @@ public class MineFm extends BaseFragment<MinePresenter> implements MineView {
                 ll_no_vip_show.setVisibility(View.VISIBLE);
                 ll_vip_show.setVisibility(View.GONE);
             }
+            //用户id
+            if (bean.getOutUserId() != null) {
+                tv_id.setText("嗨友ID:"+bean.getOutUserId() + "");
+            } else {
+                tv_id.setText( "嗨友ID:");
+            }
+            if (bean.getMaster() != null) {
+                tv_shangji.setText("师傅:"+bean.getMaster() + "");
+            } else {
+                tv_shangji.setText("师傅:");
+            }
+            //vip等级
+            if (bean.getAgentLevelName() != null) {
+                tv_vip_dengji_fm.setText(bean.getAgentLevelName() + "");
+            } else {
+                tv_vip_dengji_fm.setText("");
+            }
 
         }
     }
 
     @Override
     public void onFailure() {
-
+        dismissDialog();
     }
 }

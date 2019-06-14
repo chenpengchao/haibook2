@@ -1,11 +1,13 @@
 package com.hyjz.hnovel.api;
 
 import com.hyjz.hnovel.bean.BookRecommend;
+import com.hyjz.hnovel.bean.MaiDianBean1;
 import com.hyjz.hnovel.ireader.model.bean.BookDetailBean;
 import com.hyjz.hnovel.ireader.model.bean.ChapterInfoBean;
 import com.hyjz.hnovel.ireader.model.bean.packages.BookChapterPackage;
 import com.hyjz.hnovel.ireader.model.bean.packages.ChapterInfoPackage;
 
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -292,7 +294,28 @@ public interface ApiService {
             @Query("pageSize") Integer pageSize,
             @Query("bookId") Long bookId
     );
-
+    /**
+     * 加入书架
+     * /api/readlike/like/add
+     * bookId: 1399
+     * access_token: oW8tU57_AQa6EZH-RMnmNJi6HzgY
+     */
+    @POST("/api/readlike/like/add")
+    Observable<String> addBookShelf(
+            @Query("access_token") String sessionId,
+            @Query("bookId") Long bookId
+    );
+    /**
+     * 移出书架
+     * /api/readlike/like/add
+     */
+    @POST("/api/chapter/list/page")
+    Observable<String> removeBookShelf(
+            @Query("access_token") String sessionId,
+            @Query("pageNum") Integer pageNum,
+            @Query("pageSize") Integer pageSize,
+            @Query("bookId") Long bookId
+    );
     /**
      * 小说阅读界面api/chapter/detail
      * chapterCoin: 0
@@ -303,6 +326,26 @@ public interface ApiService {
             @Query("access_token") String sessionId,
             @Query("chapterCoin") Integer chapterCoin,
             @Query("chapterId") Long chapterId
+    );
+    /**
+     * 埋点接口
+     * chapterCoin: 0
+     * chapterId: 96063
+     * api/burying/point/browse-record?jsonData
+     */
+    @POST("/api/burying/point/browse-record")
+    Observable<String> jsonData(
+            @Query("jsonData") String sonData
+    );
+    /**
+     * 埋点接口
+     * chapterCoin: 0
+     * chapterId: 96063
+     * api/burying/point/browse-record?jsonData
+     */
+    @POST("/api/chapter/detail")
+    Observable<String> jsonData2(
+            @Query("sonData") String sonData
     );
 
     /**

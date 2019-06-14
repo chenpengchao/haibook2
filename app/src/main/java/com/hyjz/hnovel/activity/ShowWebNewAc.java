@@ -27,7 +27,10 @@ import com.hyjz.hnovel.R;
 import com.hyjz.hnovel.app.MyApp;
 import com.hyjz.hnovel.base.BaseActivity;
 import com.hyjz.hnovel.base.BasePresenter;
+import com.hyjz.hnovel.bean.BookDetailBean1;
+import com.hyjz.hnovel.constant.JsApi;
 import com.hyjz.hnovel.constant.MyWebViewClient;
+import com.hyjz.hnovel.ireader.model.bean.CollBookBean;
 import com.hyjz.hnovel.utils.DownPicUtil;
 import com.hyjz.hnovel.utils.ItemLongClickedPopWindow;
 import com.hyjz.hnovel.utils.SizeUtil;
@@ -41,11 +44,13 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.util.Date;
 
+import wendu.dsbridge.DWebView;
+
 public class ShowWebNewAc extends BaseActivity {
     private String mUrl ;
 //    private String mUrl = "https://yongka.cc/t";
 //    private Context mContext;
-    private WebView mWebView;
+    private DWebView mWebView;
     // 长按查看图片
     private ItemLongClickedPopWindow itemLongClickedPopWindow;
     // 手指触发屏幕的坐标
@@ -63,10 +68,11 @@ public class ShowWebNewAc extends BaseActivity {
 
     @Override
     public void initView() {
+        String title = getIntent().getStringExtra("title");
         initview();
         back = findViewById(R.id.back);
         tv_title = findViewById(R.id.title);
-        tv_title.setText("用卡");
+        tv_title.setText(title);
 //        iv_right = findViewById(R.id.img_right);
 //        iv_right.setImageResource(R.mipmap.iv_reload);
 //        iv_right.setOnClickListener(new View.OnClickListener() {
@@ -84,13 +90,29 @@ public class ShowWebNewAc extends BaseActivity {
     }
     private void initview() {
         mUrl = getIntent().getStringExtra("url");
-
+        JsApi api = new JsApi();
 
 
 //        mContext = this;
 
-        mWebView = (WebView) findViewById(R.id.webview);
+        mWebView = (DWebView) findViewById(R.id.webview);
+        mWebView.addJavascriptObject(api, null);
+        api.setListener(new JsApi.CallSuccessListener() {
 
+            @Override
+            public void showInfo(BookDetailBean1.BookInfo b) {
+                Intent intent = new Intent(mContext, ReadActivity.class)
+                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, false)
+                        .putExtra(ReadActivity.EXTRA_COLL_BOOK,detailtoCollBook(b) );
+                startActivity(intent);
+            }
+
+            @Override
+            public void unToken() {
+                Intent intent = new Intent(mContext, LoginAc.class);
+                startActivity(intent);
+            }
+        });
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true); // 启用js
         webSettings.setBlockNetworkImage(false); // 解决图片不显示
@@ -185,9 +207,21 @@ public class ShowWebNewAc extends BaseActivity {
                 return true;
             }
         });
+//        syncCookie(mContext,"192.168.0.106:8085");
         syncCookie(mContext,mUrl);
         // 加载页面
         mWebView.loadUrl(mUrl);
+    }
+    public CollBookBean detailtoCollBook(BookDetailBean1.BookInfo bean) {
+        CollBookBean bookDetailBean = new CollBookBean();
+        bookDetailBean.set_id(bean.getBookId().toString());
+        bookDetailBean.setAuthor(bean.getAuthorName());
+        bookDetailBean.setCover(bean.getBookCover());
+        bookDetailBean.setTitle(bean.getBookName());
+        bookDetailBean.setLastChapter(bean.getLastChapterTitle());
+        bookDetailBean.setUpdated(bean.getUpdateTime());
+        bookDetailBean.setLikeStatus(bean.getLikeStatus());
+        return bookDetailBean;
     }
     private void syncCookie(Context context, String url) {
         CookieSyncManager.createInstance(context);

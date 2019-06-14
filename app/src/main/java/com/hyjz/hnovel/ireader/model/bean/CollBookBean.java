@@ -62,7 +62,7 @@ public class CollBookBean implements Parcelable{
     //是否是本地文件
     private boolean isLocal = false;
     private Long lastChapterId;//: 65682
-
+    private Integer likeStatus;//: 0
     @ToMany(referencedJoinProperty = "bookId")
     private List<BookChapterBean> bookChapterList;
     /** Used to resolve relations */
@@ -72,11 +72,11 @@ public class CollBookBean implements Parcelable{
     @Generated(hash = 1552163441)
     private transient CollBookBeanDao myDao;
 
-    @Generated(hash = 609837166)
+    @Generated(hash = 1074532218)
     public CollBookBean(String _id, String title, String author, String shortIntro, String cover,
             boolean hasCp, int latelyFollower, double retentionRatio, String updated, String lastRead,
             int chaptersCount, String lastChapter, boolean isUpdate, boolean isLocal,
-            Long lastChapterId) {
+            Long lastChapterId, Integer likeStatus) {
         this._id = _id;
         this.title = title;
         this.author = author;
@@ -92,6 +92,7 @@ public class CollBookBean implements Parcelable{
         this.isUpdate = isUpdate;
         this.isLocal = isLocal;
         this.lastChapterId = lastChapterId;
+        this.likeStatus = likeStatus;
     }
 
     public CollBookBean() {
@@ -99,6 +100,14 @@ public class CollBookBean implements Parcelable{
         bookChapterList.add(new BookChapterBean());
 
 
+    }
+
+    public Integer getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(Integer likeStatus) {
+        this.likeStatus = likeStatus;
     }
 
     public Long getLastChapterId() {

@@ -121,10 +121,11 @@ public class ReaderCodeAc extends BaseActivity <ReaderCodePresenter> implements 
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Intent intent = new Intent(mContext, BookDetailAc.class);
-                intent.putExtra("bookId", mAdapter.getData().get(position).getBookId());
+                Intent intent = new Intent(mContext, ShowWebNewAc.class);
+                intent.putExtra("title", "详情");
+                intent.putExtra("url","http://www.haishuwu.com/detail?id="+ mAdapter.getData().get(position).getBookId());
                 startActivity(intent);
-                Toast.makeText(mContext, Integer.toString(position), Toast.LENGTH_LONG).show();
+//                Toast.makeText(mContext, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }
